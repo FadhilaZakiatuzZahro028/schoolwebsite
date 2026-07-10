@@ -41,6 +41,6 @@ return [
         'autoOrientation' => true,
         'decodeAnimation' => true,
         'backgroundColor' => 'ffffff',
-        'strip' => false,
+        'strip' => true,
     ],
 ];

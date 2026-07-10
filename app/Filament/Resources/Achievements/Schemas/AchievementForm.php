@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Achievements\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebpImageUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -46,18 +46,12 @@ class AchievementForm
                             ->minValue(2000)
                             ->maxValue((int) date('Y') + 1),
 
-                        FileUpload::make('image')
-                            ->label('Foto Dokumentasi')
-                            ->image()
-                            ->disk('public')
+                        WebpImageUpload::make(
+                            name: 'image',
+                            label: 'Foto Dokumentasi',
+                            aspectRatio: '4:3',
+                        )
                             ->directory('achievements')
-                            ->visibility('public')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(2048)
-                            ->imagePreviewHeight('160')
-                            ->downloadable()
-                            ->openable()
-                            ->preventFilePathTampering()
                             ->required(),
 
                         Textarea::make('description')

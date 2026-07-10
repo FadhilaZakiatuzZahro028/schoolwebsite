@@ -9,7 +9,7 @@ class WebpImageUpload
     public static function make(
         string $name,
         string $label,
-        ?string $aspectRatio = null
+        ?string $aspectRatio = null,
     ): FileUpload {
         $field = FileUpload::make($name)
             ->label($label)
@@ -24,8 +24,10 @@ class WebpImageUpload
             ->visibility('public')
             ->storeFiles(false)
             ->imageEditor()
+            ->imagePreviewHeight('160')
+            ->downloadable()
             ->openable()
-            ->downloadable();
+            ->preventFilePathTampering();
 
         if ($aspectRatio !== null) {
             $field

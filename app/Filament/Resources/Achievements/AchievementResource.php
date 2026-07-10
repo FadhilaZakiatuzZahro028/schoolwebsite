@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Achievements;
 
-use App\Filament\Resources\Achievements\Pages;
 use App\Filament\Resources\Achievements\Schemas\AchievementForm;
 use App\Filament\Resources\Achievements\Tables\AchievementsTable;
 use App\Models\Achievement;
@@ -19,9 +18,9 @@ class AchievementResource extends Resource
 {
     protected static ?string $model = Achievement::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-trophy';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-trophy';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Prestasi';
 
