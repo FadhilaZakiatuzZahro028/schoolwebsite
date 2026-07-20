@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Extracurriculars;
 
-use App\Filament\Resources\Extracurriculars\Pages;
 use App\Filament\Resources\Extracurriculars\Schemas\ExtracurricularForm;
 use App\Filament\Resources\Extracurriculars\Tables\ExtracurricularsTable;
 use App\Models\Extracurricular;
@@ -19,9 +18,9 @@ class ExtracurricularResource extends Resource
 {
     protected static ?string $model = Extracurricular::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Ekstrakurikuler';
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Extracurriculars\Pages;
 
+use App\Filament\Concerns\HandlesWebpUploads;
 use App\Filament\Resources\Extracurriculars\ExtracurricularResource;
 use App\Models\Extracurricular;
 use Filament\Resources\Pages\CreateRecord;
@@ -9,6 +10,8 @@ use Illuminate\Support\Str;
 
 class CreateExtracurricular extends CreateRecord
 {
+    use HandlesWebpUploads;
+
     protected static string $resource = ExtracurricularResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -19,7 +22,13 @@ class CreateExtracurricular extends CreateRecord
 
         $data['slug'] = $this->makeUniqueSlug($slugSource);
 
-        return $data;
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'image',
+            directory: 'extracurriculars',
+            maxWidth: 1600,
+            quality: 80,
+        );
     }
 
     protected function getRedirectUrl(): string

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Extracurriculars\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebpImageUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
@@ -38,18 +38,12 @@ class ExtracurricularForm
                             ->maxLength(255)
                             ->helperText('Contoh: Jumat, 15.00 - 17.00 WIB'),
 
-                        FileUpload::make('image')
-                            ->label('Foto Kegiatan')
-                            ->image()
-                            ->disk('public')
+                        WebpImageUpload::make(
+                            name: 'image',
+                            label: 'Foto Kegiatan',
+                            aspectRatio: '4:3',
+                        )
                             ->directory('extracurriculars')
-                            ->visibility('public')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(2048)
-                            ->imagePreviewHeight('160')
-                            ->downloadable()
-                            ->openable()
-                            ->preventFilePathTampering()
                             ->required(),
 
                         Textarea::make('description')

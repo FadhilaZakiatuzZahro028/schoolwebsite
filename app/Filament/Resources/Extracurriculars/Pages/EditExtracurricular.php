@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Extracurriculars\Pages;
 
+use App\Filament\Concerns\HandlesWebpUploads;
 use App\Filament\Resources\Extracurriculars\ExtracurricularResource;
 use App\Models\Extracurricular;
 use Filament\Actions\DeleteAction;
@@ -10,6 +11,8 @@ use Illuminate\Support\Str;
 
 class EditExtracurricular extends EditRecord
 {
+    use HandlesWebpUploads;
+
     protected static string $resource = ExtracurricularResource::class;
 
     protected function mutateFormDataBeforeSave(array $data): array
@@ -18,9 +21,24 @@ class EditExtracurricular extends EditRecord
             ? $data['slug']
             : $data['name'];
 
-        $data['slug'] = $this->makeUniqueSlug($slugSource, $this->record->getKey());
+        $data['slug'] = $this->makeUniqueSlug(
+            $slugSource,
+            $this->record->getKey(),
+        );
 
-        return $data;
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'image',
+            directory: 'extracurriculars',
+            oldPath: $this->record->image,
+            maxWidth: 1600,
+            quality: 80,
+        );
+    }
+
+    protected function afterSave(): void
+    {
+        $this->deleteReplacedWebpFiles();
     }
 
     protected function getHeaderActions(): array
