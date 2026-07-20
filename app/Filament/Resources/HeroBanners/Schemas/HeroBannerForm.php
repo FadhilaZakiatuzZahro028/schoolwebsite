@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\HeroBanners\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebpImageUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -26,19 +26,17 @@ class HeroBannerForm
                             ->maxLength(255)
                             ->helperText('Opsional. Contoh: Selamat Datang di Website Resmi Sekolah.'),
 
-                        FileUpload::make('image')
-                            ->label('Gambar Banner')
-                            ->image()
-                            ->disk('public')
-                            ->directory('heroes')
-                            ->visibility('public')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(2048)
-                            ->imagePreviewHeight('180')
-                            ->downloadable()
-                            ->openable()
-                            ->preventFilePathTampering()
-                            ->required(),
+                       WebpImageUpload::make(
+    name: 'image',
+    label: 'Gambar Banner',
+    aspectRatio: '16:9',
+)
+    ->directory('heroes')
+    ->imagePreviewHeight('180')
+    ->helperText(
+        'Gunakan gambar horizontal rasio 16:9. Format JPG, PNG, atau WebP dengan ukuran maksimal 2 MB.'
+    )
+    ->required(),
 
                         TextInput::make('button_text')
                             ->label('Teks Tombol CTA')
