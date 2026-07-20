@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Facilities\Pages;
 
+use App\Filament\Concerns\HandlesWebpUploads;
 use App\Filament\Resources\Facilities\FacilityResource;
 use App\Models\Facility;
 use Filament\Resources\Pages\CreateRecord;
@@ -9,6 +10,8 @@ use Illuminate\Support\Str;
 
 class CreateFacility extends CreateRecord
 {
+    use HandlesWebpUploads;
+
     protected static string $resource = FacilityResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -19,7 +22,13 @@ class CreateFacility extends CreateRecord
 
         $data['slug'] = $this->makeUniqueSlug($slugSource);
 
-        return $data;
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'image',
+            directory: 'facilities',
+            maxWidth: 1600,
+            quality: 80,
+        );
     }
 
     protected function getRedirectUrl(): string

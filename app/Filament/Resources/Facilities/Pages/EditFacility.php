@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Facilities\Pages;
 
+use App\Filament\Concerns\HandlesWebpUploads;
 use App\Filament\Resources\Facilities\FacilityResource;
 use App\Models\Facility;
 use Filament\Actions\DeleteAction;
@@ -10,6 +11,8 @@ use Illuminate\Support\Str;
 
 class EditFacility extends EditRecord
 {
+    use HandlesWebpUploads;
+
     protected static string $resource = FacilityResource::class;
 
     protected function mutateFormDataBeforeSave(array $data): array
@@ -18,9 +21,24 @@ class EditFacility extends EditRecord
             ? $data['slug']
             : $data['name'];
 
-        $data['slug'] = $this->makeUniqueSlug($slugSource, $this->record->getKey());
+        $data['slug'] = $this->makeUniqueSlug(
+            $slugSource,
+            $this->record->getKey(),
+        );
 
-        return $data;
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'image',
+            directory: 'facilities',
+            oldPath: $this->record->image,
+            maxWidth: 1600,
+            quality: 80,
+        );
+    }
+
+    protected function afterSave(): void
+    {
+        $this->deleteReplacedWebpFiles();
     }
 
     protected function getHeaderActions(): array

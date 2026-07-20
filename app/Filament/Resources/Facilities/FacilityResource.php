@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Facilities;
 
-use App\Filament\Resources\Facilities\Pages;
 use App\Filament\Resources\Facilities\Schemas\FacilityForm;
 use App\Filament\Resources\Facilities\Tables\FacilitiesTable;
 use App\Models\Facility;
@@ -19,9 +18,9 @@ class FacilityResource extends Resource
 {
     protected static ?string $model = Facility::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-building-office-2';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Fasilitas';
 
