@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Galleries;
 
-use App\Filament\Resources\Galleries\Pages;
 use App\Filament\Resources\Galleries\Schemas\GalleryForm;
 use App\Filament\Resources\Galleries\Tables\GalleriesTable;
 use App\Models\Gallery;
@@ -17,9 +16,9 @@ class GalleryResource extends Resource
 {
     protected static ?string $model = Gallery::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-photo';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-photo';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Galeri Foto';
 

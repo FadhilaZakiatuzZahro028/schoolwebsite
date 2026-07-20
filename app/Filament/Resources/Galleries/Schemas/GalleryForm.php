@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Galleries\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebpImageUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
@@ -21,18 +21,12 @@ class GalleryForm
                             ->required()
                             ->maxLength(255),
 
-                        FileUpload::make('image')
-                            ->label('File Foto')
-                            ->image()
-                            ->disk('public')
+                        WebpImageUpload::make(
+                            name: 'image',
+                            label: 'Foto Galeri',
+                            aspectRatio: '1:1',
+                        )
                             ->directory('gallery')
-                            ->visibility('public')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(2048)
-                            ->imagePreviewHeight('180')
-                            ->downloadable()
-                            ->openable()
-                            ->preventFilePathTampering()
                             ->required(),
 
                         Textarea::make('description')
