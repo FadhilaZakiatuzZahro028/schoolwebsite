@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\News\Pages;
 
+use App\Filament\Concerns\HandlesWebpUploads;
 use App\Filament\Resources\News\NewsResource;
 use App\Models\News;
 use Filament\Resources\Pages\CreateRecord;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 
 class CreateNews extends CreateRecord
 {
+    use HandlesWebpUploads;
     protected static string $resource = NewsResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -25,11 +27,17 @@ class CreateNews extends CreateRecord
             $data['published_at'] = now();
         }
 
-        if (($data['status'] ?? 'draft') === 'draft') {
-            $data['published_at'] = null;
-        }
+       if (($data['status'] ?? 'draft') === 'draft') {
+    $data['published_at'] = null;
+}
 
-        $data = $this->fillSeoFallbacks($data);
+$data = $this->processWebpUpload(
+    data: $data,
+    field: 'thumbnail',
+    directory: 'news',
+);
+
+$data = $this->fillSeoFallbacks($data);
 
         return $data;
     }

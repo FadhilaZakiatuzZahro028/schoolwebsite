@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\News\Schemas;
 
+use App\Filament\Forms\Components\WebpImageUpload;
 use App\Models\News;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -53,19 +53,11 @@ class NewsForm
                             ->seconds(false)
                             ->helperText('Boleh dikosongkan. Jika status Published, sistem akan mengisi otomatis waktu sekarang.'),
 
-                        FileUpload::make('thumbnail')
-                            ->label('Gambar Utama')
-                            ->image()
-                            ->disk('public')
-                            ->directory('news')
-                            ->visibility('public')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(2048)
-                            ->imagePreviewHeight('160')
-                            ->downloadable()
-                            ->openable()
-                            ->preventFilePathTampering()
-                            ->required(),
+                        WebpImageUpload::make(
+    'thumbnail',
+    'Gambar Utama',
+)
+    ->required(),
 
                         Textarea::make('excerpt')
                             ->label('Ringkasan Berita')

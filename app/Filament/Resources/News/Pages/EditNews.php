@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\News\Pages;
 
+use App\Filament\Concerns\HandlesWebpUploads;
 use App\Filament\Resources\News\NewsResource;
 use App\Models\News;
 use Filament\Actions\DeleteAction;
@@ -10,6 +11,8 @@ use Illuminate\Support\Str;
 
 class EditNews extends EditRecord
 {
+        use HandlesWebpUploads;
+
     protected static string $resource = NewsResource::class;
 
     protected function mutateFormDataBeforeSave(array $data): array
@@ -29,13 +32,25 @@ class EditNews extends EditRecord
         }
 
         if (($data['status'] ?? 'draft') === 'draft') {
-            $data['published_at'] = null;
-        }
+    $data['published_at'] = null;
+}
 
-        $data = $this->fillSeoFallbacks($data);
+$data = $this->processWebpUpload(
+    data: $data,
+    field: 'thumbnail',
+    directory: 'news',
+    oldPath: $this->record->thumbnail,
+);
+
+$data = $this->fillSeoFallbacks($data);
 
         return $data;
     }
+
+    protected function afterSave(): void
+{
+    $this->deleteReplacedWebpFiles();
+}
 
     protected function getHeaderActions(): array
     {
