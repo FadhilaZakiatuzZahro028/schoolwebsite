@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SchoolProfiles\Schemas;
 
+use App\Filament\Forms\Components\WebpImageUpload;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -82,31 +83,18 @@ class SchoolProfileForm
 
                         Tab::make('Logo & Media')
                             ->schema([
-                                FileUpload::make('logo')
-                                    ->label('Logo Sekolah')
-                                    ->image()
-                                    ->disk('public')
-                                    ->directory('logos')
-                                    ->visibility('public')
-                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                WebpImageUpload::make(
+                                    'logo',
+                                    'Logo Sekolah',
+                                )
                                     ->maxSize(2048)
-                                    ->imagePreviewHeight('120')
-                                    ->downloadable()
-                                    ->openable()
-                                    ->preventFilePathTampering(),
-
-                                FileUpload::make('favicon')
-                                    ->label('Favicon')
-                                    ->image()
-                                    ->disk('public')
-                                    ->directory('logos')
-                                    ->visibility('public')
-                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                    ->imagePreviewHeight('120'),
+                                WebpImageUpload::make(
+                                    'favicon',
+                                    'Favicon',
+                                )
                                     ->maxSize(1024)
-                                    ->imagePreviewHeight('80')
-                                    ->downloadable()
-                                    ->openable()
-                                    ->preventFilePathTampering(),
+                                    ->imagePreviewHeight('80'),
 
                                 Textarea::make('maps_embed')
                                     ->label('Embed Google Maps')
@@ -133,23 +121,23 @@ class SchoolProfileForm
 
                         Tab::make('Informasi PPDB')
                             ->schema([
-                                Textarea::make('ppdb_info')
-                                    ->label('Informasi PPDB')
-                                    ->rows(10)
-                                    ->columnSpanFull()
-                                    ->helperText('Isi alur, syarat, jadwal, biaya, dan informasi pendaftaran siswa baru.'),
+                                                                Textarea::make('ppdb_info')
+                                                                    ->label('Informasi PPDB')
+                                                                    ->rows(10)
+                                                                    ->columnSpanFull()
+                                                                    ->helperText('Isi alur, syarat, jadwal, biaya, dan informasi pendaftaran siswa baru.'),
 
-                                FileUpload::make('ppdb_brochure')
-                                    ->label('Brosur PPDB PDF')
-                                    ->disk('public')
-                                    ->directory('documents')
-                                    ->visibility('public')
-                                    ->acceptedFileTypes(['application/pdf'])
-                                    ->maxSize(5120)
-                                    ->downloadable()
-                                    ->openable()
-                                    ->preventFilePathTampering(),
-                            ]),
+                                                                FileUpload::make('ppdb_brochure')
+                                                                    ->label('Brosur PPDB PDF')
+                                                                    ->disk('public')
+                                                                    ->directory('documents')
+                                                                    ->visibility('public')
+                                                                    ->acceptedFileTypes(['application/pdf'])
+                                                                    ->maxSize(5120)
+                                                                    ->downloadable()
+                                                                    ->openable()
+                                                                    ->preventFilePathTampering(),
+                                                            ]),
                     ])
                     ->columnSpanFull(),
             ]);
