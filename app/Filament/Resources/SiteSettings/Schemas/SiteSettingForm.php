@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\SiteSettings\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebpImageUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -50,18 +50,10 @@ class SiteSettingForm
                                     ->maxLength(255)
                                     ->helperText('Pisahkan keyword dengan koma.'),
 
-                                FileUpload::make('default_og_image')
-                                    ->label('Default Open Graph Image')
-                                    ->image()
-                                    ->disk('public')
-                                    ->directory('logos/og')
-                                    ->visibility('public')
-                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                                    ->maxSize(2048)
-                                    ->imagePreviewHeight('120')
-                                    ->downloadable()
-                                    ->openable()
-                                    ->preventFilePathTampering(),
+                                WebpImageUpload::make(
+    'default_og_image',
+    'Default Open Graph Image',
+),
                             ]),
                     ])
                     ->columnSpanFull(),
