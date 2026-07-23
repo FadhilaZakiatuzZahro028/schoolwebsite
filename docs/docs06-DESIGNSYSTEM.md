@@ -63,7 +63,7 @@ Konsep visual menggabungkan identitas Formal institusi pendidikan dengan estetik
 
  Primary Button: Background `Primary-900` atau `Gradient`, teks putih, radius 12px, efek hover brightness 105%.
  Secondary Button: Background putih, border `Primary-700`, teks `Primary-700`, radius 12px.
- Accent Button: Background `Gold` (#F59E0B), teks `Primary-900`, digunakan khusus untuk CTA krusial (e.g., PPDB / Hubungi Kami).
+ Accent Button: Background `Gold` (#F59E0B), teks `Primary-900`, digunakan khusus untuk CTA krusial (e.g., SPMB / Hubungi Kami).
 
 ### 5.2 Kartu Konten (Cards) & Rasio Gambar (Image Ratios)
 
@@ -82,8 +82,8 @@ Konsep visual menggabungkan identitas Formal institusi pendidikan dengan estetik
  Icon Library: Menggunakan Lucide Icons (Ukuran standard: 20px/24px untuk UI, 32px/48px untuk highlight ikon). Dilarang memakai Bootstrap Icons.
  Struktur Komponen (Atomic Mapping):
  Atoms: Button, Input Field, Badge Status, Heading, Lucide Icon, Text Link.
- Molecules: News Card, Achievement Card, PPDB Download Box, Search Bar, Chat Bubble.
+ Molecules: News Card, Achievement Card, SPMB Download Box, Search Bar, Chat Bubble.
  Organisms: Navbar (Sticky glass state), Hero Section, Footer, Contact Form Section, Chatbot Widget overlay.
  Templates: Public Master Layout, Detail Grid Layout, Filament Dashboard View.
- Pages: Home, Profile (Tab-based), PPDB Info, News Index & Detail, Achievement, Extracurricular, Facility, Contact.
+ Pages: Home, Profile (Tab-based), SMPB Info, News Index & Detail, Achievement, Extracurricular, Facility, Contact.
 
