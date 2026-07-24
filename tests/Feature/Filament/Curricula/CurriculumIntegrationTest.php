@@ -43,7 +43,7 @@ class CurriculumIntegrationTest extends TestCase
         );
 
         $imageUpload = UploadedFile::fake()
-            ->image('materi-kurikulum.png', 1800, 1200)
+            ->image('materi-kurikulum.png', 480, 320)
             ->size(1024);
 
         Livewire::test(CreateCurriculum::class)
@@ -143,7 +143,7 @@ class CurriculumIntegrationTest extends TestCase
         $oldPaths = app(ImageUploadService::class)
             ->storeOriginalWithWebpPreview(
                 file: UploadedFile::fake()
-                    ->image('old-material.png', 1200, 800)
+                    ->image('old-material.png', 480, 320)
                     ->size(1024),
                 directory: 'curriculums',
                 maxWidth: 1600,
@@ -161,7 +161,7 @@ class CurriculumIntegrationTest extends TestCase
         ]);
 
         $newImageUpload = UploadedFile::fake()
-            ->image('new-material.jpg', 1800, 1200)
+            ->image('new-material.jpg', 480, 320)
             ->size(1024);
 
         Livewire::test(EditCurriculum::class, [
@@ -335,7 +335,7 @@ class CurriculumIntegrationTest extends TestCase
         $imagePaths = app(ImageUploadService::class)
             ->storeOriginalWithWebpPreview(
                 file: UploadedFile::fake()
-                    ->image('material-list-delete-test.png', 1200, 800)
+                    ->image('material-list-delete-test.png', 480, 320)
                     ->size(1024),
                 directory: 'curriculums',
                 maxWidth: 1600,
@@ -388,7 +388,7 @@ class CurriculumIntegrationTest extends TestCase
         $imagePaths = app(ImageUploadService::class)
             ->storeOriginalWithWebpPreview(
                 file: UploadedFile::fake()
-                    ->image('existing-material.png', 1200, 800)
+                    ->image('existing-material.png', 480, 320)
                     ->size(1024),
                 directory: 'curriculums',
                 maxWidth: 1600,

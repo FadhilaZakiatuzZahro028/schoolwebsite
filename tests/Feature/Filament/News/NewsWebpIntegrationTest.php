@@ -44,7 +44,7 @@ class NewsWebpIntegrationTest extends TestCase
     public function test_it_creates_news_thumbnail_as_webp(): void
     {
         $upload = UploadedFile::fake()
-            ->image('news-source.jpg', 2000, 1125)
+            ->image('news-source.jpg', 480, 270)
             ->size(1024);
 
         Livewire::test(CreateNews::class)
@@ -97,7 +97,7 @@ class NewsWebpIntegrationTest extends TestCase
         ]);
 
         $newUpload = UploadedFile::fake()
-            ->image('replacement.png', 2000, 1125)
+            ->image('replacement.png', 480, 270)
             ->size(1024);
 
         Livewire::test(EditNews::class, [
@@ -183,7 +183,7 @@ class NewsWebpIntegrationTest extends TestCase
     private function storeExistingNewsImage(string $filename): string
     {
         $path = app(ImageUploadService::class)->storeAsWebp(
-            file: UploadedFile::fake()->image($filename, 1600, 900),
+            file: UploadedFile::fake()->image($filename, 480, 270),
             directory: 'news',
             maxWidth: 1600,
             quality: 80,

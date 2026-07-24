@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ContactMessages;
 
-use App\Filament\Resources\ContactMessages\Pages;
 use App\Filament\Resources\ContactMessages\Schemas\ContactMessageForm;
 use App\Filament\Resources\ContactMessages\Tables\ContactMessagesTable;
 use App\Models\ContactMessage;
@@ -19,9 +18,9 @@ class ContactMessageResource extends Resource
 {
     protected static ?string $model = ContactMessage::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-envelope';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Interaksi Pengunjung';
+    protected static string|UnitEnum|null $navigationGroup = 'Interaksi Pengunjung';
 
     protected static ?string $navigationLabel = 'Pesan Kontak';
 

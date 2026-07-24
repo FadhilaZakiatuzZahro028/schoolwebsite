@@ -71,7 +71,7 @@ class ImageUploadServiceTest extends TestCase
         Storage::fake('public');
 
         $upload = UploadedFile::fake()
-            ->image('materi-kurikulum.png', 1800, 1200)
+            ->image('materi-kurikulum.png', 640, 480)
             ->size(1024);
 
         $paths = app(ImageUploadService::class)->storeOriginalWithWebpPreview(

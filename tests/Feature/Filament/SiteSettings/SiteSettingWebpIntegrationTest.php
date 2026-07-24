@@ -37,7 +37,7 @@ class SiteSettingWebpIntegrationTest extends TestCase
     public function test_it_creates_default_og_image_as_webp(): void
     {
         $ogImageUpload = UploadedFile::fake()
-            ->image('default-og-image.png', 1200, 630)
+            ->image('default-og-image.png', 480, 252)
             ->size(1024);
 
         Livewire::test(CreateSiteSetting::class)
@@ -120,7 +120,7 @@ class SiteSettingWebpIntegrationTest extends TestCase
         ]);
 
         $newOgImageUpload = UploadedFile::fake()
-            ->image('replacement-og-image.jpg', 1200, 630)
+            ->image('replacement-og-image.jpg', 480, 252)
             ->size(1024);
 
         Livewire::test(EditSiteSetting::class, [

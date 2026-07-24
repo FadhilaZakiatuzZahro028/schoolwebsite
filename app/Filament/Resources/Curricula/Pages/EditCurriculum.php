@@ -24,42 +24,42 @@ class EditCurriculum extends EditRecord
     protected array $imageFilesPendingDeletion = [];
 
     protected function mutateFormDataBeforeSave(array $data): array
-{
-    if (
-        array_key_exists('pdf_file', $data)
-        && filled($this->record->pdf_file)
-        && $data['pdf_file'] !== $this->record->pdf_file
-    ) {
-        $this->pdfFilePendingDeletion = $this->record->pdf_file;
-    }
-
-    if (array_key_exists('image_file', $data)) {
-        $imageFile = $data['image_file'];
-
+    {
         if (
-            $imageFile instanceof UploadedFile
-            || $imageFile instanceof TemporaryUploadedFile
+            array_key_exists('pdf_file', $data)
+            && filled($this->record->pdf_file)
+            && $data['pdf_file'] !== $this->record->pdf_file
         ) {
-            $paths = app(ImageUploadService::class)
-                ->storeOriginalWithWebpPreview(
-                    file: $imageFile,
-                    directory: 'curriculums',
-                    maxWidth: 1600,
-                    quality: 80,
-                );
-
-            $data['image_file'] = $paths['original'];
-            $data['preview_image'] = $paths['preview'];
-
-            $this->queueOldImageFilesForDeletion();
-        } elseif (blank($imageFile) && filled($this->record->image_file)) {
-            $data['image_file'] = $this->record->image_file;
-            $data['preview_image'] = $this->record->preview_image;
+            $this->pdfFilePendingDeletion = $this->record->pdf_file;
         }
-    }
 
-    return $data;
-}
+        if (array_key_exists('image_file', $data)) {
+            $imageFile = $data['image_file'];
+
+            if (
+                $imageFile instanceof UploadedFile
+                || $imageFile instanceof TemporaryUploadedFile
+            ) {
+                $paths = app(ImageUploadService::class)
+                    ->storeOriginalWithWebpPreview(
+                        file: $imageFile,
+                        directory: 'curriculums',
+                        maxWidth: 1600,
+                        quality: 80,
+                    );
+
+                $data['image_file'] = $paths['original'];
+                $data['preview_image'] = $paths['preview'];
+
+                $this->queueOldImageFilesForDeletion();
+            } elseif (blank($imageFile) && filled($this->record->image_file)) {
+                $data['image_file'] = $this->record->image_file;
+                $data['preview_image'] = $this->record->preview_image;
+            }
+        }
+
+        return $data;
+    }
 
     protected function afterSave(): void
     {

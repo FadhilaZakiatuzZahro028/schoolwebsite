@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\NewsCategories;
 
-use App\Filament\Resources\NewsCategories\Pages;
 use App\Filament\Resources\NewsCategories\Schemas\NewsCategoryForm;
 use App\Filament\Resources\NewsCategories\Tables\NewsCategoriesTable;
 use App\Models\NewsCategory;
@@ -17,9 +16,9 @@ class NewsCategoryResource extends Resource
 {
     protected static ?string $model = NewsCategory::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-tag';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Kategori Berita';
 

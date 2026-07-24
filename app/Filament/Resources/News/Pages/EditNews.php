@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class EditNews extends EditRecord
 {
-        use HandlesWebpUploads;
+    use HandlesWebpUploads;
 
     protected static string $resource = NewsResource::class;
 
@@ -32,25 +32,25 @@ class EditNews extends EditRecord
         }
 
         if (($data['status'] ?? 'draft') === 'draft') {
-    $data['published_at'] = null;
-}
+            $data['published_at'] = null;
+        }
 
-$data = $this->processWebpUpload(
-    data: $data,
-    field: 'thumbnail',
-    directory: 'news',
-    oldPath: $this->record->thumbnail,
-);
+        $data = $this->processWebpUpload(
+            data: $data,
+            field: 'thumbnail',
+            directory: 'news',
+            oldPath: $this->record->thumbnail,
+        );
 
-$data = $this->fillSeoFallbacks($data);
+        $data = $this->fillSeoFallbacks($data);
 
         return $data;
     }
 
     protected function afterSave(): void
-{
-    $this->deleteReplacedWebpFiles();
-}
+    {
+        $this->deleteReplacedWebpFiles();
+    }
 
     protected function getHeaderActions(): array
     {

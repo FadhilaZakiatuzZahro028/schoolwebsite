@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\News;
 
-use App\Filament\Resources\News\Pages;
 use App\Filament\Resources\News\Schemas\NewsForm;
 use App\Filament\Resources\News\Tables\NewsTable;
 use App\Models\News;
@@ -19,9 +18,9 @@ class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-newspaper';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Berita';
 

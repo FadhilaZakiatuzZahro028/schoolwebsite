@@ -26,17 +26,17 @@ class HeroBannerForm
                             ->maxLength(255)
                             ->helperText('Opsional. Contoh: Selamat Datang di Website Resmi Sekolah.'),
 
-                       WebpImageUpload::make(
-    name: 'image',
-    label: 'Gambar Banner',
-    aspectRatio: '16:9',
-)
-    ->directory('heroes')
-    ->imagePreviewHeight('180')
-    ->helperText(
-        'Gunakan gambar horizontal rasio 16:9. Format JPG, PNG, atau WebP dengan ukuran maksimal 2 MB.'
-    )
-    ->required(),
+                        WebpImageUpload::make(
+                            name: 'image',
+                            label: 'Gambar Banner',
+                            aspectRatio: '16:9',
+                        )
+                            ->directory('heroes')
+                            ->imagePreviewHeight('180')
+                            ->helperText(
+                                'Gunakan gambar horizontal rasio 16:9. Format JPG, PNG, atau WebP dengan ukuran maksimal 2 MB.'
+                            )
+                            ->required(),
 
                         TextInput::make('button_text')
                             ->label('Teks Tombol CTA')

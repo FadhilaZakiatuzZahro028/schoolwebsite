@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\HeroBanners;
 
-use App\Filament\Resources\HeroBanners\Pages;
 use App\Filament\Resources\HeroBanners\Schemas\HeroBannerForm;
 use App\Filament\Resources\HeroBanners\Tables\HeroBannersTable;
 use App\Models\HeroBanner;
@@ -17,9 +16,9 @@ class HeroBannerResource extends Resource
 {
     protected static ?string $model = HeroBanner::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-photo';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-photo';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Hero Banner';
 

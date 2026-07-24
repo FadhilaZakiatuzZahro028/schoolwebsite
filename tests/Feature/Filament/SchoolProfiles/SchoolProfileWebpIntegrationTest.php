@@ -37,11 +37,11 @@ class SchoolProfileWebpIntegrationTest extends TestCase
     public function test_it_creates_logo_and_favicon_as_webp(): void
     {
         $logoUpload = UploadedFile::fake()
-->image('school-logo.png', 1300, 800)
+            ->image('school-logo.png', 400, 250)
             ->size(1024);
 
         $faviconUpload = UploadedFile::fake()
-->image('school-favicon.jpg', 600, 600)
+            ->image('school-favicon.jpg', 128, 128)
             ->size(512);
 
         Livewire::test(CreateSchoolProfile::class)
@@ -145,11 +145,11 @@ class SchoolProfileWebpIntegrationTest extends TestCase
         ]);
 
         $newLogoUpload = UploadedFile::fake()
-->image('replacement-logo.jpg', 800, 600)
+            ->image('replacement-logo.jpg', 400, 250)
             ->size(1024);
 
         $newFaviconUpload = UploadedFile::fake()
-->image('replacement-favicon.png', 256, 256)
+            ->image('replacement-favicon.png', 128, 128)
             ->size(512);
 
         Livewire::test(EditSchoolProfile::class, [
@@ -295,21 +295,21 @@ class SchoolProfileWebpIntegrationTest extends TestCase
     }
 
     private function storeExistingImage(
-    string $filename,
-    int $maxWidth,
-): string {
-    $sourceSize = min($maxWidth, 640);
+        string $filename,
+        int $maxWidth,
+    ): string {
+        $sourceSize = min($maxWidth, 640);
 
-    $path = app(ImageUploadService::class)->storeAsWebp(
-        file: UploadedFile::fake()->image(
-            $filename,
-            $sourceSize,
-            $sourceSize,
-        ),
-        directory: 'logos',
-        maxWidth: $maxWidth,
-        quality: 80,
-    );
+        $path = app(ImageUploadService::class)->storeAsWebp(
+            file: UploadedFile::fake()->image(
+                $filename,
+                $sourceSize,
+                $sourceSize,
+            ),
+            directory: 'logos',
+            maxWidth: $maxWidth,
+            quality: 80,
+        );
 
         $this->assertNotNull($path);
 

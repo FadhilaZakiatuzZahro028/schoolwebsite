@@ -8,23 +8,24 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditSiteSetting extends EditRecord
 {
-        use HandlesWebpUploads;
+    use HandlesWebpUploads;
+
     protected static string $resource = SiteSettingResource::class;
 
     protected function mutateFormDataBeforeSave(array $data): array
-{
-    return $this->processWebpUpload(
-        data: $data,
-        field: 'default_og_image',
-        directory: 'logos/og',
-        oldPath: $this->record->default_og_image,
-    );
-}
+    {
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'default_og_image',
+            directory: 'logos/og',
+            oldPath: $this->record->default_og_image,
+        );
+    }
 
-protected function afterSave(): void
-{
-    $this->deleteReplacedWebpFiles();
-}
+    protected function afterSave(): void
+    {
+        $this->deleteReplacedWebpFiles();
+    }
 
     protected function getHeaderActions(): array
     {

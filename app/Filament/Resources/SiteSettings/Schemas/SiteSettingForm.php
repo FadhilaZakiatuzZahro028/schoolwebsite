@@ -51,9 +51,9 @@ class SiteSettingForm
                                     ->helperText('Pisahkan keyword dengan koma.'),
 
                                 WebpImageUpload::make(
-    'default_og_image',
-    'Default Open Graph Image',
-),
+                                    'default_og_image',
+                                    'Default Open Graph Image',
+                                ),
                             ]),
                     ])
                     ->columnSpanFull(),

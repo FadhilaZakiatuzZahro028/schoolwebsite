@@ -54,10 +54,10 @@ class NewsForm
                             ->helperText('Boleh dikosongkan. Jika status Published, sistem akan mengisi otomatis waktu sekarang.'),
 
                         WebpImageUpload::make(
-    'thumbnail',
-    'Gambar Utama',
-)
-    ->required(),
+                            'thumbnail',
+                            'Gambar Utama',
+                        )
+                            ->required(),
 
                         Textarea::make('excerpt')
                             ->label('Ringkasan Berita')
@@ -76,18 +76,18 @@ class NewsForm
 
                 Section::make('SEO Berita')
                     ->schema([
-                        TextInput::make('meta_title')
-                            ->label('Meta Title')
-                            ->maxLength(60)
-                            ->helperText('Maksimal 60 karakter. Jika kosong, sistem memakai judul berita.'),
+                                                TextInput::make('meta_title')
+                                                    ->label('Meta Title')
+                                                    ->maxLength(60)
+                                                    ->helperText('Maksimal 60 karakter. Jika kosong, sistem memakai judul berita.'),
 
-                        Textarea::make('meta_description')
-                            ->label('Meta Description')
-                            ->maxLength(160)
-                            ->rows(3)
-                            ->columnSpanFull()
-                            ->helperText('Maksimal 160 karakter. Jika kosong, sistem mengambil ringkasan dari isi berita.'),
-                    ])
+                                                Textarea::make('meta_description')
+                                                    ->label('Meta Description')
+                                                    ->maxLength(160)
+                                                    ->rows(3)
+                                                    ->columnSpanFull()
+                                                    ->helperText('Maksimal 160 karakter. Jika kosong, sistem mengambil ringkasan dari isi berita.'),
+                                            ])
                     ->columns(2)
                     ->columnSpanFull(),
             ]);

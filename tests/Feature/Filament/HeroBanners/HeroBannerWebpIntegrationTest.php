@@ -46,7 +46,7 @@ class HeroBannerWebpIntegrationTest extends TestCase
         ]);
 
         $upload = UploadedFile::fake()
-            ->image('hero-source.jpg', 2400, 1350)
+            ->image('hero-source.jpg', 480, 270)
             ->size(1024);
 
         Livewire::test(CreateHeroBanner::class)
@@ -71,9 +71,9 @@ class HeroBannerWebpIntegrationTest extends TestCase
         $this->assertStringStartsWith('heroes/', $createdBanner->image);
         $this->assertStringEndsWith('.webp', $createdBanner->image);
 
-$this->assertTrue(
-    Storage::disk('public')->exists($createdBanner->image)
-);
+        $this->assertTrue(
+            Storage::disk('public')->exists($createdBanner->image)
+        );
         $this->assertStoredImageIsValidWebp($createdBanner->image);
     }
 
@@ -92,24 +92,24 @@ $this->assertTrue(
         ]);
 
         $newUpload = UploadedFile::fake()
-            ->image('replacement.png', 2000, 1125)
+            ->image('replacement.png', 480, 270)
             ->size(1024);
 
         Livewire::test(EditHeroBanner::class, [
-    'record' => $banner->getRouteKey(),
-])
-    ->fillForm([
-        'title' => 'Banner Utama Diperbarui',
-        'subtitle' => null,
-        'button_text' => null,
-        'button_url' => null,
-        'sort_order' => 0,
-        'is_active' => true,
-    ])
-    ->set('data.image', [])
-->set('data.image', [$newUpload])
-    ->call('save')
-    ->assertHasNoFormErrors();
+            'record' => $banner->getRouteKey(),
+        ])
+            ->fillForm([
+                'title' => 'Banner Utama Diperbarui',
+                'subtitle' => null,
+                'button_text' => null,
+                'button_url' => null,
+                'sort_order' => 0,
+                'is_active' => true,
+            ])
+            ->set('data.image', [])
+            ->set('data.image', [$newUpload])
+            ->call('save')
+            ->assertHasNoFormErrors();
 
         $banner->refresh();
 
@@ -118,12 +118,12 @@ $this->assertTrue(
         $this->assertStringEndsWith('.webp', $banner->image);
 
         $this->assertFalse(
-    Storage::disk('public')->exists($oldPath)
-);
+            Storage::disk('public')->exists($oldPath)
+        );
 
-$this->assertTrue(
-    Storage::disk('public')->exists($banner->image)
-);
+        $this->assertTrue(
+            Storage::disk('public')->exists($banner->image)
+        );
 
         $this->assertStoredImageIsValidWebp($banner->image);
     }
@@ -154,14 +154,15 @@ $this->assertTrue(
         $banner->refresh();
 
         $this->assertSame($existingPath, $banner->image);
-$this->assertTrue(
-    Storage::disk('public')->exists($existingPath)
-);    }
+        $this->assertTrue(
+            Storage::disk('public')->exists($existingPath)
+        );
+    }
 
     private function storeExistingHeroImage(string $filename): string
     {
         $path = app(ImageUploadService::class)->storeAsWebp(
-            file: UploadedFile::fake()->image($filename, 1600, 900),
+            file: UploadedFile::fake()->image($filename, 480, 270),
             directory: 'heroes',
             maxWidth: 1600,
             quality: 80,

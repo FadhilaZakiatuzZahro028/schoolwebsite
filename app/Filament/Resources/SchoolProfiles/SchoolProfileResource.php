@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\SchoolProfiles;
 
-use App\Filament\Resources\SchoolProfiles\Pages;
 use App\Filament\Resources\SchoolProfiles\Schemas\SchoolProfileForm;
 use App\Filament\Resources\SchoolProfiles\Tables\SchoolProfilesTable;
 use App\Models\SchoolProfile;
@@ -17,9 +16,9 @@ class SchoolProfileResource extends Resource
 {
     protected static ?string $model = SchoolProfile::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-building-library';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-library';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Konten Website';
+    protected static string|UnitEnum|null $navigationGroup = 'Konten Website';
 
     protected static ?string $navigationLabel = 'Profil Sekolah';
 

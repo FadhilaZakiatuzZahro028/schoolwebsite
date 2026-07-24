@@ -9,7 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateSiteSetting extends CreateRecord
 {
-        use HandlesWebpUploads;
+    use HandlesWebpUploads;
+
     protected static string $resource = SiteSettingResource::class;
 
     public function mount(): void
@@ -28,13 +29,13 @@ class CreateSiteSetting extends CreateRecord
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
-{
-    return $this->processWebpUpload(
-        data: $data,
-        field: 'default_og_image',
-        directory: 'logos/og',
-    );
-}
+    {
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'default_og_image',
+            directory: 'logos/og',
+        );
+    }
 
     protected function getRedirectUrl(): string
     {

@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 class CreateNews extends CreateRecord
 {
     use HandlesWebpUploads;
+
     protected static string $resource = NewsResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -27,17 +28,17 @@ class CreateNews extends CreateRecord
             $data['published_at'] = now();
         }
 
-       if (($data['status'] ?? 'draft') === 'draft') {
-    $data['published_at'] = null;
-}
+        if (($data['status'] ?? 'draft') === 'draft') {
+            $data['published_at'] = null;
+        }
 
-$data = $this->processWebpUpload(
-    data: $data,
-    field: 'thumbnail',
-    directory: 'news',
-);
+        $data = $this->processWebpUpload(
+            data: $data,
+            field: 'thumbnail',
+            directory: 'news',
+        );
 
-$data = $this->fillSeoFallbacks($data);
+        $data = $this->fillSeoFallbacks($data);
 
         return $data;
     }

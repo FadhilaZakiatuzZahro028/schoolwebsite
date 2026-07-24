@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ChatbotKnowledge;
 
-use App\Filament\Resources\ChatbotKnowledge\Pages;
 use App\Filament\Resources\ChatbotKnowledge\Schemas\ChatbotKnowledgeForm;
 use App\Filament\Resources\ChatbotKnowledge\Tables\ChatbotKnowledgeTable;
 use App\Models\ChatbotKnowledge;
@@ -17,9 +16,9 @@ class ChatbotKnowledgeResource extends Resource
 {
     protected static ?string $model = ChatbotKnowledge::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Interaksi Pengunjung';
+    protected static string|UnitEnum|null $navigationGroup = 'Interaksi Pengunjung';
 
     protected static ?string $navigationLabel = 'FAQ Chatbot';
 
@@ -35,9 +34,9 @@ class ChatbotKnowledgeResource extends Resource
     }
 
     public static function table(Table $table): Table
-{
-    return ChatbotKnowledgeTable::configure($table);
-}
+    {
+        return ChatbotKnowledgeTable::configure($table);
+    }
 
     public static function canViewAny(): bool
     {
@@ -65,11 +64,11 @@ class ChatbotKnowledgeResource extends Resource
     }
 
     public static function getPages(): array
-{
-    return [
-        'index' => Pages\ListChatbotKnowledge::route('/'),
-        'create' => Pages\CreateChatbotKnowledge::route('/create'),
-        'edit' => Pages\EditChatbotKnowledge::route('/{record}/edit'),
-    ];
-}
+    {
+        return [
+            'index' => Pages\ListChatbotKnowledge::route('/'),
+            'create' => Pages\CreateChatbotKnowledge::route('/create'),
+            'edit' => Pages\EditChatbotKnowledge::route('/{record}/edit'),
+        ];
+    }
 }

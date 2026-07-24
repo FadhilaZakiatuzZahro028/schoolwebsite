@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Users;
 
-use App\Filament\Resources\Users\Pages;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
@@ -17,9 +16,9 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Pengaturan Sistem';
+    protected static string|UnitEnum|null $navigationGroup = 'Pengaturan Sistem';
 
     protected static ?string $navigationLabel = 'Manajemen Admin';
 

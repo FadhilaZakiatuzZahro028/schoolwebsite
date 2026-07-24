@@ -13,18 +13,18 @@ class CreateGallery extends CreateRecord
     protected static string $resource = GalleryResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
-{
-    return $this->processWebpUpload(
-        data: $data,
-        field: 'image',
-        directory: 'gallery',
-        maxWidth: 1600,
-        quality: 80,
-    );
-}
+    {
+        return $this->processWebpUpload(
+            data: $data,
+            field: 'image',
+            directory: 'gallery',
+            maxWidth: 1600,
+            quality: 80,
+        );
+    }
 
-protected function getRedirectUrl(): string
-{
-    return static::getResource()::getUrl('index');
-}
+    protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('index');
+    }
 }
