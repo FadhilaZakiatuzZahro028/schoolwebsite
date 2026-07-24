@@ -4,6 +4,7 @@ namespace Tests\Feature\Filament\HeroBanners;
 
 use App\Filament\Resources\HeroBanners\Pages\CreateHeroBanner;
 use App\Filament\Resources\HeroBanners\Pages\EditHeroBanner;
+use App\Filament\Resources\HeroBanners\Pages\ListHeroBanners;
 use App\Models\HeroBanner;
 use App\Models\User;
 use App\Services\ImageUploadService;
@@ -156,6 +157,67 @@ class HeroBannerWebpIntegrationTest extends TestCase
         $this->assertSame($existingPath, $banner->image);
         $this->assertTrue(
             Storage::disk('public')->exists($existingPath)
+        );
+    }
+
+    public function test_it_deletes_the_image_when_banner_is_deleted_from_edit_page(): void
+    {
+        $imagePath = $this->storeExistingHeroImage(
+            'edit-delete-hero.jpg',
+        );
+
+        $banner = HeroBanner::query()->create([
+            'title' => 'Banner untuk Dihapus',
+            'subtitle' => null,
+            'image' => $imagePath,
+            'button_text' => null,
+            'button_url' => null,
+            'sort_order' => 0,
+            'is_active' => true,
+        ]);
+
+        Livewire::test(EditHeroBanner::class, [
+            'record' => $banner->getRouteKey(),
+        ])
+            ->callAction('delete');
+
+        $this->assertDatabaseMissing('hero_banners', [
+            'id' => $banner->getKey(),
+        ]);
+
+        Storage::disk('public')->assertMissing(
+            $imagePath,
+        );
+    }
+
+    public function test_it_deletes_the_image_when_banner_is_deleted_from_list_page(): void
+    {
+        $imagePath = $this->storeExistingHeroImage(
+            'list-delete-hero.jpg',
+        );
+
+        $banner = HeroBanner::query()->create([
+            'title' => 'Banner untuk Dihapus dari Tabel',
+            'subtitle' => null,
+            'image' => $imagePath,
+            'button_text' => null,
+            'button_url' => null,
+            'sort_order' => 0,
+            'is_active' => true,
+        ]);
+
+        Livewire::test(ListHeroBanners::class)
+            ->callTableAction(
+                'delete',
+                $banner,
+            );
+
+        $this->assertDatabaseMissing('hero_banners', [
+            'id' => $banner->getKey(),
+        ]);
+
+        Storage::disk('public')->assertMissing(
+            $imagePath,
         );
     }
 

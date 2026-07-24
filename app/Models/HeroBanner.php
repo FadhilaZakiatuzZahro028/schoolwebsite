@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,6 +26,15 @@ class HeroBanner extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order')->orderByDesc('created_at');
+    }
+
+    protected static function booted(): void
+    {
+        static::deleted(function (HeroBanner $heroBanner): void {
+            app(ImageUploadService::class)->delete(
+                $heroBanner->image,
+            );
+        });
     }
 
     protected function casts(): array
