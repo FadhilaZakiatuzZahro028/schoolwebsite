@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +19,15 @@ class Extracurricular extends Model
         'schedule',
         'image',
     ];
+
+    protected static function booted(): void
+    {
+        static::forceDeleted(function (Extracurricular $extracurricular): void {
+            app(ImageUploadService::class)->delete(
+                $extracurricular->image,
+            );
+        });
+    }
 
     public function scopeSearch(Builder $query, ?string $keyword): Builder
     {
