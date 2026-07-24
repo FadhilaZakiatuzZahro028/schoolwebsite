@@ -14,8 +14,8 @@ class ImageUploadServiceTest extends TestCase
         Storage::fake('public');
 
         $upload = UploadedFile::fake()
-    ->image('prestasi.jpg', 1700, 900)
-    ->size(1024);
+            ->image('prestasi.jpg', 1700, 900)
+            ->size(1024);
 
         $path = app(ImageUploadService::class)->storeAsWebp(
             file: $upload,
@@ -64,5 +64,40 @@ class ImageUploadServiceTest extends TestCase
         app(ImageUploadService::class)->delete($path);
 
         Storage::disk('public')->assertMissing($path);
+    }
+
+    public function test_it_stores_original_image_and_creates_webp_preview(): void
+    {
+        Storage::fake('public');
+
+        $upload = UploadedFile::fake()
+            ->image('materi-kurikulum.png', 1800, 1200)
+            ->size(1024);
+
+        $paths = app(ImageUploadService::class)->storeOriginalWithWebpPreview(
+            file: $upload,
+            directory: 'curriculums',
+            maxWidth: 1600,
+            quality: 80,
+        );
+
+        $this->assertNotNull($paths['original']);
+        $this->assertNotNull($paths['preview']);
+
+        $this->assertStringStartsWith('curriculums/', $paths['original']);
+        $this->assertStringEndsWith('.png', $paths['original']);
+
+        $this->assertStringStartsWith('curriculums/', $paths['preview']);
+        $this->assertStringEndsWith('.webp', $paths['preview']);
+
+        Storage::disk('public')->assertExists($paths['original']);
+        Storage::disk('public')->assertExists($paths['preview']);
+
+        $previewContents = Storage::disk('public')->get($paths['preview']);
+        $previewInformation = getimagesizefromstring($previewContents);
+
+        $this->assertIsArray($previewInformation);
+        $this->assertSame('image/webp', $previewInformation['mime']);
+        $this->assertLessThanOrEqual(1600, $previewInformation[0]);
     }
 }

@@ -60,6 +60,51 @@ class ImageUploadService
         return $path;
     }
 
+    public function storeOriginalWithWebpPreview(
+        UploadedFile|TemporaryUploadedFile $file,
+        string $directory,
+        int $maxWidth = 1600,
+        int $quality = 80,
+    ): array {
+        $directory = trim($directory, '/');
+        $extension = strtolower($file->getClientOriginalExtension());
+        $baseFilename = now()->format('YmdHis').'-'.Str::uuid();
+
+        $originalPath = "{$directory}/{$baseFilename}.{$extension}";
+
+        Storage::disk('public')->makeDirectory($directory);
+
+        $stored = Storage::disk('public')->putFileAs(
+            $directory,
+            $file,
+            "{$baseFilename}.{$extension}",
+        );
+
+        if (! $stored) {
+            throw new RuntimeException(
+                "Gagal menyimpan gambar asli ke {$originalPath}.",
+            );
+        }
+
+        try {
+            $previewPath = $this->storeAsWebp(
+                file: $file,
+                directory: $directory,
+                maxWidth: $maxWidth,
+                quality: $quality,
+            );
+        } catch (\Throwable $exception) {
+            Storage::disk('public')->delete($originalPath);
+
+            throw $exception;
+        }
+
+        return [
+            'original' => $originalPath,
+            'preview' => $previewPath,
+        ];
+    }
+
     public function delete(?string $path): void
     {
         if ($path === null || $path === '') {
