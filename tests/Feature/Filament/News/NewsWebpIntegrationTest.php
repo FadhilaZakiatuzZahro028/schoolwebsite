@@ -180,6 +180,76 @@ class NewsWebpIntegrationTest extends TestCase
         );
     }
 
+    public function test_it_keeps_thumbnail_when_news_is_soft_deleted(): void
+    {
+        $thumbnailPath = 'news/soft-delete-news.webp';
+
+        Storage::disk('public')->put(
+            $thumbnailPath,
+            'fake image contents',
+        );
+
+        $news = News::query()->create([
+            'category_id' => $this->category->getKey(),
+            'author_id' => auth()->id(),
+            'title' => 'Berita untuk Soft Delete',
+            'slug' => 'berita-untuk-soft-delete',
+            'excerpt' => 'Ringkasan berita.',
+            'content' => '<p>Isi berita.</p>',
+            'thumbnail' => $thumbnailPath,
+            'status' => 'draft',
+            'meta_title' => 'Berita untuk Soft Delete',
+            'meta_description' => 'Deskripsi berita.',
+            'view_count' => 0,
+            'published_at' => null,
+        ]);
+
+        $news->delete();
+
+        $this->assertSoftDeleted('news', [
+            'id' => $news->getKey(),
+        ]);
+
+        Storage::disk('public')->assertExists(
+            $thumbnailPath,
+        );
+    }
+
+    public function test_it_deletes_thumbnail_when_news_is_force_deleted(): void
+    {
+        $thumbnailPath = 'news/force-delete-news.webp';
+
+        Storage::disk('public')->put(
+            $thumbnailPath,
+            'fake image contents',
+        );
+
+        $news = News::query()->create([
+            'category_id' => $this->category->getKey(),
+            'author_id' => auth()->id(),
+            'title' => 'Berita untuk Force Delete',
+            'slug' => 'berita-untuk-force-delete',
+            'excerpt' => 'Ringkasan berita.',
+            'content' => '<p>Isi berita.</p>',
+            'thumbnail' => $thumbnailPath,
+            'status' => 'draft',
+            'meta_title' => 'Berita untuk Force Delete',
+            'meta_description' => 'Deskripsi berita.',
+            'view_count' => 0,
+            'published_at' => null,
+        ]);
+
+        $news->forceDelete();
+
+        $this->assertDatabaseMissing('news', [
+            'id' => $news->getKey(),
+        ]);
+
+        Storage::disk('public')->assertMissing(
+            $thumbnailPath,
+        );
+    }
+
     private function storeExistingNewsImage(string $filename): string
     {
         $path = app(ImageUploadService::class)->storeAsWebp(

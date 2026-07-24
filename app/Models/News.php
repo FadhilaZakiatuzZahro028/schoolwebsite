@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,15 @@ class News extends Model
         'view_count',
         'published_at',
     ];
+
+    protected static function booted(): void
+    {
+        static::forceDeleted(function (News $news): void {
+            app(ImageUploadService::class)->delete(
+                $news->thumbnail,
+            );
+        });
+    }
 
     public function category(): BelongsTo
     {
