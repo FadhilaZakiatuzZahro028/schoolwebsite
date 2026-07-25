@@ -200,63 +200,6 @@ class SchoolProfileWebpIntegrationTest extends TestCase
         );
     }
 
-    public function test_it_replaces_ppdb_brochure_and_deletes_old_pdf_after_save(): void
-    {
-        $oldBrochurePath = 'documents/old-ppdb-brochure.pdf';
-
-        Storage::disk('public')->put(
-            $oldBrochurePath,
-            'old brochure content',
-        );
-
-        $profile = SchoolProfile::query()->create([
-            ...$this->validProfileData(),
-            'ppdb_brochure' => $oldBrochurePath,
-        ]);
-
-        $newBrochure = UploadedFile::fake()->create(
-            'new-ppdb-brochure.pdf',
-            1024,
-            'application/pdf',
-        );
-
-        Livewire::test(EditSchoolProfile::class, [
-            'record' => $profile->getRouteKey(),
-        ])
-            ->set('data.ppdb_brochure', [])
-            ->set('data.ppdb_brochure', [$newBrochure])
-            ->call('save')
-            ->assertHasNoFormErrors();
-
-        $profile->refresh();
-
-        $this->assertNotNull($profile->ppdb_brochure);
-        $this->assertNotSame(
-            $oldBrochurePath,
-            $profile->ppdb_brochure,
-        );
-
-        $this->assertStringStartsWith(
-            'documents/',
-            $profile->ppdb_brochure,
-        );
-
-        $this->assertStringEndsWith(
-            '.pdf',
-            $profile->ppdb_brochure,
-        );
-
-        $this->assertFalse(
-            Storage::disk('public')->exists($oldBrochurePath)
-        );
-
-        $this->assertTrue(
-            Storage::disk('public')->exists(
-                $profile->ppdb_brochure
-            )
-        );
-    }
-
     public function test_it_prevents_creating_a_second_school_profile(): void
     {
         SchoolProfile::query()->create(
@@ -283,7 +226,6 @@ class SchoolProfileWebpIntegrationTest extends TestCase
             'mission' => 'Menyelenggarakan pendidikan yang berkualitas.',
             'principal_name' => 'Kepala Sekolah',
             'principal_message' => 'Selamat datang di SMA PGRI 1 Tulungagung.',
-            'ppdb_info' => 'Informasi pendaftaran peserta didik baru.',
             'address' => 'Tulungagung, Jawa Timur',
             'phone' => '081234567890',
             'email' => 'info@smapgri1ta.sch.id',

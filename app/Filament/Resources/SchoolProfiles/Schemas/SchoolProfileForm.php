@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\SchoolProfiles\Schemas;
 
 use App\Filament\Forms\Components\WebpImageUpload;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Tabs;
@@ -118,26 +117,6 @@ class SchoolProfileForm
                                     ->maxLength(255),
                             ])
                             ->columns(2),
-
-                        Tab::make('Informasi PPDB')
-                            ->schema([
-                                Textarea::make('ppdb_info')
-                                    ->label('Informasi PPDB')
-                                    ->rows(10)
-                                    ->columnSpanFull()
-                                    ->helperText('Isi alur, syarat, jadwal, biaya, dan informasi pendaftaran siswa baru.'),
-
-                                FileUpload::make('ppdb_brochure')
-                                    ->label('Brosur PPDB PDF')
-                                    ->disk('public')
-                                    ->directory('documents')
-                                    ->visibility('public')
-                                    ->acceptedFileTypes(['application/pdf'])
-                                    ->maxSize(5120)
-                                    ->downloadable()
-                                    ->openable()
-                                    ->preventFilePathTampering(),
-                            ]),
                     ])
                     ->columnSpanFull(),
             ]);
