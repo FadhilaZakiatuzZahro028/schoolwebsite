@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ChatbotKnowledge\Schemas;
 
+use App\Models\ChatbotKnowledge;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -19,17 +20,7 @@ class ChatbotKnowledgeForm
                     ->schema([
                         Select::make('category')
                             ->label('Kategori')
-                            ->options([
-                                'umum' => 'Umum',
-                                'profil' => 'Profil Sekolah',
-                                'alamat' => 'Alamat',
-                                'kontak' => 'Kontak',
-                                'ppdb' => 'PPDB',
-                                'berita' => 'Berita',
-                                'prestasi' => 'Prestasi',
-                                'ekstrakurikuler' => 'Ekstrakurikuler',
-                                'fasilitas' => 'Fasilitas',
-                            ])
+                            ->options(ChatbotKnowledge::CATEGORY_OPTIONS)
                             ->default('umum')
                             ->required(),
 

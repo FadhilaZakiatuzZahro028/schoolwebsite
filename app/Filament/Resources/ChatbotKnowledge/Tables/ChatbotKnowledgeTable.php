@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ChatbotKnowledge\Tables;
 
+use App\Models\ChatbotKnowledge;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -54,17 +55,7 @@ class ChatbotKnowledgeTable
 
                 SelectFilter::make('category')
                     ->label('Kategori')
-                    ->options([
-                        'umum' => 'Umum',
-                        'profil' => 'Profil Sekolah',
-                        'alamat' => 'Alamat',
-                        'kontak' => 'Kontak',
-                        'ppdb' => 'PPDB',
-                        'berita' => 'Berita',
-                        'prestasi' => 'Prestasi',
-                        'ekstrakurikuler' => 'Ekstrakurikuler',
-                        'fasilitas' => 'Fasilitas',
-                    ]),
+                    ->options(ChatbotKnowledge::CATEGORY_OPTIONS),
             ])
             ->defaultSort('updated_at', 'desc')
             ->recordActions([

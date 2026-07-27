@@ -7,6 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChatbotKnowledge extends Model
 {
+    /** @var array<string, string> */
+    public const CATEGORY_OPTIONS = [
+        'umum' => 'Umum',
+        'profil' => 'Profil Sekolah',
+        'sejarah' => 'Sejarah Sekolah',
+        'guru' => 'Data Guru',
+        'karyawan' => 'Data Karyawan',
+        'kurikulum' => 'Kurikulum',
+        'spmb' => 'SPMB',
+        'berita' => 'Berita',
+        'prestasi' => 'Prestasi',
+        'ekstrakurikuler' => 'Ekstrakurikuler',
+        'fasilitas' => 'Fasilitas',
+        'alumni' => 'Alumni',
+        'kontak' => 'Kontak',
+        'alamat' => 'Alamat',
+    ];
+
     protected $table = 'chatbot_knowledges';
 
     protected $fillable = [
