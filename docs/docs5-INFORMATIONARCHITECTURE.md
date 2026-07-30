@@ -1,5 +1,5 @@
 # Information Architecture (IA) - Website Resmi SMA PGRI 1 Tulungagung
-Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
+Version: 1.4 | Status: Revised Approved Baseline (Production-Ready)
 
 ## 1. Peta Situs Global (Sitemap)
 Struktur kedalaman informasi dibatasi maksimal 3 klik dari Beranda demi kemudahan navigasi pengguna.
@@ -62,13 +62,14 @@ Struktur submenu:
 Halaman Profil Sekolah menggabungkan informasi profil utama, Visi & Misi, Tujuan Sekolah, dan Sambutan Kepala Sekolah sehingga tidak perlu menjadi submenu terpisah.
 
 ### 2.2 Navigasi Kaki (Footer Global)
- Kolom 1: Logo Sekolah, Alamat Resmi, Nomor Telepon, Email Instansi, dan Jam Operasional Layanan.
 
- Kolom 2 (Quick Links): Tautan cepat ke Profil Sekolah, Kurikulum, Berita, SPMB, Alumni, Kontak, dan Login Admin.
+ Kolom 1 (Identitas Sekolah): Logo sekolah, nama sekolah, deskripsi singkat, alamat resmi, nomor telepon, dan email instansi yang ditarik dinamis dari database. Jam operasional hanya ditampilkan apabila tersedia pada sumber data.
 
- Kolom 3 (Media Sosial): Tautan ke Instagram, Facebook, YouTube, dan widget mini Google Maps jika tersedia.
+ Kolom 2 (Tautan Cepat): Tautan publik menuju Profil Sekolah, Kurikulum, Berita, SPMB, Alumni, dan Kontak. Tautan menuju panel admin tidak ditampilkan pada footer publik.
 
- Baris Bawah: Hak Cipta dinamis berdasarkan konfigurasi website.
+ Kolom 3 (Lokasi & Media Sosial): Tautan Instagram, Facebook, dan YouTube dalam bentuk tombol ikon, serta mini Google Maps apabila data embed tersedia.
+
+ Baris Bawah: Hak cipta dinamis berdasarkan konfigurasi website.
 
 ---
 

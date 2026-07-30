@@ -1,5 +1,5 @@
 # UI Component Specification - Website Resmi SMA PGRI 1 Tulungagung
-Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
+Version: 1.4 | Status: Revised Approved Baseline (Production-Ready)
 
 ---
 
@@ -32,7 +32,7 @@ Elemen sederhana yang hanya digunakan satu kali tidak wajib dipisahkan menjadi B
 | `<x-contact-form>` | None | Default State, Validation Error, Submit Processing, Success State | Halaman Kontak |
 | `<x-google-map>` | `mapsEmbedUrl` | Responsive Iframe Container | Halaman Kontak, Footer |
 | `<x-chatbot-widget>` | None | Floating Trigger \| Opened Chat Window, Typing Indicator, Fallback Error | Global Overlay |
-| `<x-footer>` | `schoolData`, `socialLinks` | Deep Blue Surface, Quick Links, Copyright Bar | Global Layout Footer |
+| `<x-footer>` | `schoolProfile`, `siteSetting` | Deep Blue Surface, Brand Identity, Contact Information with Lucide Icons, Public Quick Links, Social Icon Buttons, Optional Mini Google Maps, Copyright Bar | Global Layout Footer |
 
 ---
 

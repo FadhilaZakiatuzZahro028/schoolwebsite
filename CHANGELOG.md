@@ -21,6 +21,8 @@
 * Perintah test Composer menggunakan process isolation untuk meningkatkan stabilitas pengujian konversi gambar.
 * Seeder default tidak lagi membuat akun pengujian otomatis.
 * Dokumentasi proyek diperbarui menyesuaikan kebutuhan fitur dan implementasi backend terbaru.
+* Rancangan footer publik diperbarui dengan identitas sekolah, informasi kontak menggunakan Lucide Icons, tautan publik tanpa Login Admin, tombol media sosial, dan mini Google Maps opsional.
+
 
 ### Fixed
 
