@@ -1,5 +1,5 @@
 # Functional Requirements Specification (FRS) - Website Resmi SMA PGRI 1 Tulungagung
-Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
+Version: 1.4 | Status: Revised Approved Baseline (Production-Ready)
 
 ## 1. Aktor Sistem & Hak Akses Kontrol
 
@@ -44,37 +44,64 @@ Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
 
 ### Modul 3: Manajemen Guru & Karyawan
 
- Fungsi Pengelolaan: Admin dapat melakukan CRUD data Guru dan Karyawan melalui satu fondasi data `staff_members`.
+Fungsi Pengelolaan: Admin dapat melakukan CRUD data Guru dan Karyawan melalui satu fondasi data `staff_members`.
 
- Data yang dapat dikelola:
- - Nama
- - Jenis Staf (`teacher` atau `employee`)
- - Foto opsional
- - Jabatan
- - Mata Pelajaran opsional
- - Bagian atau Unit opsional
- - Status Aktif
- - Urutan Tampil
+Data yang dapat dikelola:
+- Nama
+- Jenis Staf (`teacher` atau `employee`)
+- Foto opsional
+- Jabatan
+- Mata Pelajaran opsional
+- Bagian atau Unit opsional
+- Status Aktif
+- Urutan Tampil
+- Satu atau lebih Riwayat Pendidikan
 
- Aturan Jenis Staf:
- - Data dengan `staff_type = teacher` ditampilkan pada halaman Data Guru.
- - Data dengan `staff_type = employee` ditampilkan pada halaman Data Karyawan.
+Riwayat Pendidikan:
+- Riwayat pendidikan dikelola melalui data `staff_educations`.
+- Satu staf dapat memiliki lebih dari satu riwayat pendidikan.
+- Setiap riwayat pendidikan dapat mencakup Jenjang Pendidikan, Program Studi opsional, Perguruan Tinggi atau Institusi Pendidikan, dan Urutan Tampil.
+- Riwayat pendidikan memiliki relasi dengan `staff_members` dan mengikuti urutan tampil yang telah ditentukan.
 
- Tampilan Publik:
- - Data Guru dan Data Karyawan ditampilkan pada halaman yang berbeda.
- - Tampilan menggunakan kartu profil.
- - Data Guru dapat menampilkan Foto, Nama, Jabatan, dan Mata Pelajaran.
- - Data Karyawan dapat menampilkan Foto, Nama, Jabatan, dan Bagian/Unit.
- - Hanya data berstatus aktif yang ditampilkan kepada publik.
+Aturan Jenis Staf:
+- Data dengan `staff_type = teacher` ditampilkan pada halaman Data Guru.
+- Data dengan `staff_type = employee` ditampilkan pada halaman Data Karyawan.
 
- Aturan Foto:
- - Foto bersifat opsional.
- - Jika foto tidak tersedia, frontend wajib menampilkan placeholder yang konsisten.
- - Foto yang diunggah untuk tampilan website menggunakan sistem optimasi dan konversi WebP yang sudah tersedia.
+Tampilan Publik:
+- Data Guru dan Data Karyawan ditampilkan pada halaman yang berbeda.
+- Kedua halaman menggunakan centered horizontal carousel.
+- Pada desktop, tiga kartu dapat terlihat secara bersamaan.
+- Kartu aktif berada di tengah serta tampil lebih besar, lebih terang, dan memiliki shadow yang lebih kuat.
+- Kartu sisi kiri dan kanan tampil sedikit lebih kecil dengan opacity dan shadow yang lebih rendah.
+- Halaman Guru menampilkan Kepala Sekolah sebagai slide aktif pertama. Pengaturan tersebut dilakukan dengan menempatkan Kepala Sekolah pada `sort_order` paling awal di antara data Guru aktif.
+- Guru berikutnya mengikuti `sort_order`.
+- Halaman Karyawan menggunakan Karyawan aktif dengan `sort_order` paling awal sebagai slide pertama.
+- Carousel berjalan otomatis secara berulang.
+- Autoplay berhenti sementara ketika pointer berada pada area carousel dan dilanjutkan kembali ketika pointer meninggalkan area.
+- Desktop mendukung drag menggunakan mouse.
+- Perangkat sentuh mendukung swipe.
+- Navigasi manual Previous dan Next tersedia dan dapat dioperasikan menggunakan keyboard.
+- Data Guru dapat menampilkan Foto, Nama, Riwayat Pendidikan, Jabatan, dan Mata Pelajaran.
+- Data Karyawan dapat menampilkan Foto, Nama, Riwayat Pendidikan, Jabatan, dan Bagian/Unit.
+- Hanya data berstatus aktif yang ditampilkan kepada publik.
+
+Aturan Kondisi Data:
+- Jika hanya terdapat satu data staf aktif, satu kartu ditampilkan di tengah dan fungsi autoplay serta drag/swipe yang tidak diperlukan dinonaktifkan.
+- Jika tidak terdapat data staf aktif, frontend menampilkan empty state yang sesuai.
+
+Aturan Gerakan & Aksesibilitas:
+- Animasi carousel tidak boleh menyebabkan layout shift yang mengganggu.
+- Sistem harus menghormati preferensi `prefers-reduced-motion`; autoplay atau animasi non-esensial dikurangi atau dinonaktifkan bagi pengguna yang mengaktifkan preferensi tersebut.
+- Kontrol carousel harus memiliki label aksesibel yang jelas.
+
+Aturan Foto:
+- Foto bersifat opsional.
+- Jika foto tidak tersedia, frontend wajib menampilkan placeholder yang konsisten.
+- Foto yang diunggah untuk tampilan website menggunakan sistem optimasi dan konversi WebP yang sudah tersedia.
 
 ---
 
-### Modul 4: CRUD Konten Dinamis (Berita, Kategori, Prestasi, Ekstrakurikuler, Fasilitas, Galeri)
+### Modul 4: CRUD Konten Dinamis (Berita, Kategori, Prestasi, Program Unggulan, Ekstrakurikuler, Fasilitas, Galeri)
 
  Validasi & Pemrosesan Input Umum:
  - Field Judul atau Nama wajib diisi sesuai kebutuhan entitas.
@@ -88,6 +115,113 @@ Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
  - Penghapusan data pada modul yang sudah menggunakan `SoftDeletes` tetap mengikuti implementasi backend yang tersedia.
 
  Backend lama yang sudah stabil tidak boleh diubah hanya untuk kebutuhan kerapian apabila tidak terdapat masalah fungsional.
+
+---
+
+#### Aturan Khusus Modul Program Unggulan
+
+Pengaturan Tingkat Halaman:
+- Admin dapat mengelola narasi pengantar Program Unggulan.
+- Admin dapat mengelola keterangan umum mengenai kolaborasi pengembangan keterampilan dengan LPK/BLK.
+- Pengantar dan informasi kolaborasi berasal dari backend dan tidak ditulis secara hardcode pada Blade.
+- Sistem tidak menampilkan klaim mengenai sertifikasi, penyaluran kerja, jaminan pekerjaan, nama mitra tertentu, atau klaim lain apabila data tersebut belum dikonfirmasi sekolah.
+
+Data utama Program Unggulan:
+- Nama program.
+- Ringkasan singkat.
+- Deskripsi atau manfaat program.
+- Foto utama.
+- Status aktif.
+- Urutan tampil.
+
+Aturan Data:
+- Program tidak menggunakan slug pada versi saat ini.
+- Hanya data `is_active = true` yang ditampilkan kepada publik.
+- Data publik diurutkan berdasarkan `sort_order`.
+- Admin dapat menambah program baru tanpa perubahan struktur database.
+- Sistem tidak membatasi data hanya pada lima bidang keterampilan awal.
+
+Dokumentasi Tambahan:
+- Setiap program dapat memiliki maksimal 2 foto dokumentasi tambahan.
+- Dokumentasi tambahan bersifat opsional.
+- Setiap foto menyimpan file gambar, teks alternatif opsional, dan urutan tampil.
+- Semua foto diproses melalui `ImageUploadService` dan fondasi WebP existing.
+- Sistem tidak membuat uploader atau service pemrosesan gambar baru khusus Program Unggulan.
+
+Tampilan Publik:
+- Program Unggulan menggunakan satu landing page `/program-unggulan`.
+- Tidak tersedia route detail per program pada versi saat ini.
+- Halaman menggunakan pendekatan image-led/skill-development showcase dan tidak diwajibkan menggunakan pola white-card katalog.
+- Jika sebuah program hanya mempunyai foto utama, program tetap dapat ditampilkan secara utuh.
+- Dokumentasi tambahan hanya dirender jika tersedia.
+- Jika tidak terdapat program aktif, halaman menampilkan empty state yang sesuai.
+- Tidak menggunakan carousel dokumentasi secara default.
+
+Lifecycle Media:
+- Soft delete Program Unggulan tidak langsung menghapus foto utama maupun dokumentasi tambahan.
+- Restore mempertahankan media yang sebelumnya dimiliki program.
+- Force delete wajib membersihkan foto utama dan seluruh dokumentasi tambahan.
+- Penggantian atau penghapusan foto dokumentasi wajib membersihkan file lama yang tidak lagi digunakan dari Laravel Storage.
+
+---
+
+#### Aturan Khusus Modul Ekstrakurikuler
+
+Data utama Ekstrakurikuler:
+- Nama
+- Slug
+- Deskripsi kegiatan
+- Nama pembina
+- Jadwal kegiatan
+- Foto utama
+
+Dokumentasi Tambahan:
+- Setiap Ekstrakurikuler dapat memiliki maksimal 2 foto dokumentasi tambahan.
+- Dokumentasi tambahan bersifat opsional.
+- Setiap foto tambahan menyimpan file gambar, teks alternatif opsional, dan urutan tampil.
+- Gambar diproses melalui sistem optimasi WebP yang sudah tersedia.
+- Admin dapat menambah, mengubah, mengurutkan, dan menghapus foto dokumentasi tambahan melalui form Ekstrakurikuler.
+- Sistem harus membersihkan file gambar lama apabila gambar diganti atau data dihapus secara permanen.
+- Penghapusan permanen Ekstrakurikuler juga membersihkan file dokumentasi tambahannya.
+- Soft delete Ekstrakurikuler tidak langsung menghapus file foto utama maupun dokumentasi tambahan sehingga data masih dapat dipulihkan.
+
+Halaman Detail Publik:
+- Foto utama menjadi focal visual kegiatan.
+- Nama pembina dan jadwal ditampilkan sebagai informasi pendukung yang ringkas.
+- Deskripsi menjadi bagian "Tentang Kegiatan".
+- Jika tidak terdapat foto tambahan, section Dokumentasi Kegiatan tidak dirender.
+- Jika tersedia 1 foto tambahan, tampilkan sebagai satu visual.
+- Jika tersedia 2 foto tambahan, tampilkan dalam layout dua gambar yang responsif.
+- Halaman tidak menggunakan carousel atau galeri besar secara default.
+
+---
+
+#### Aturan Khusus Modul Fasilitas
+
+Data utama Fasilitas:
+- Nama
+- Slug
+- Deskripsi
+- Foto Utama
+
+Foto Dokumentasi Tambahan:
+- Setiap fasilitas dapat memiliki maksimal 2 foto dokumentasi tambahan.
+- Foto tambahan bersifat opsional.
+- Setiap foto tambahan dapat memiliki teks alternatif opsional dan urutan tampil.
+- Foto tambahan diproses menggunakan fondasi optimasi WebP yang sudah tersedia.
+- Sistem tidak membuat fondasi pemrosesan gambar baru apabila kebutuhan dapat menggunakan `ImageUploadService` yang tersedia.
+
+Tampilan Publik:
+- Halaman indeks menggunakan foto utama sebagai cover kartu fasilitas.
+- Kartu fasilitas mengarah menuju halaman detail.
+- Halaman detail menggunakan foto utama sebagai visual utama.
+- Dokumentasi tambahan hanya ditampilkan apabila tersedia.
+- Jika tidak tersedia foto tambahan, halaman tidak menampilkan placeholder atau area dokumentasi kosong.
+
+Lifecycle Media:
+- Penggantian atau penghapusan foto tambahan wajib membersihkan file yang tidak lagi digunakan dari Laravel Storage.
+- Soft delete fasilitas tidak menghapus media secara permanen.
+- Force delete fasilitas wajib membersihkan foto utama dan seluruh file dokumentasi tambahannya.
 
 ---
 
@@ -296,7 +430,7 @@ Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
  - Kurikulum
  - SPMB
 
- Foto Guru, Karyawan, Alumni Pilihan, Hero Banner, Berita, Prestasi, Ekstrakurikuler, Fasilitas, dan Galeri menggunakan format teroptimasi untuk kebutuhan tampilan website.
+  Foto Guru, Karyawan, Alumni Pilihan, Hero Banner, Berita, Prestasi, Program Unggulan, Ekstrakurikuler, Fasilitas, dan Galeri menggunakan format teroptimasi untuk kebutuhan tampilan website.
 
  Sistem dilarang membuat fondasi pemrosesan gambar baru apabila fungsi yang dibutuhkan sudah dapat menggunakan sistem WebP reusable yang tersedia.
 

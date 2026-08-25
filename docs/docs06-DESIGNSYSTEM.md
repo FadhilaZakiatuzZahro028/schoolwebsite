@@ -1,7 +1,7 @@
 docs/06-design-system.md
 
 # Design System - Website Resmi SMA PGRI 1 Tulungagung
-Version: 1.1 | Status: Approved Baseline (Production-Ready)
+Version: 1.2 | Status: Approved Baseline (Production-Ready)
 
 ## 1. Filosofi Desain: Modern Academic Glass
 Konsep visual menggabungkan identitas Formal institusi pendidikan dengan estetika Modern melalui sentuhan Glassmorphism ringan, White Space yang luas, gradasi biru yang elegan, serta Micro-interactions yang presisi tanpa mengganggu keterbacaan teks.
@@ -70,6 +70,41 @@ Konsep visual menggabungkan identitas Formal institusi pendidikan dengan estetik
  Spesifikasi Kartu: Background putih bersih, radius 16px, `Shadow-MD`, judul maksimal 2 baris, deskripsi maksimal 3 baris. Efek hover: `transform: translateY(-6px); transition: 250ms ease-in-out;`.
  Rasio Aspek Gambar: Hero (`16:9` / `21:9`), Berita (`16:9`), Prestasi/Fasilitas/Ekskul (`4:3`), Galeri/Logo (`1:1`).
 
+ #### 5.2.1 Staff Carousel & Active Card State
+
+Halaman Data Guru dan Data Karyawan menggunakan centered horizontal carousel dengan hierarki visual yang menempatkan kartu aktif sebagai fokus utama.
+
+Desktop:
+- Tiga kartu dapat terlihat secara bersamaan.
+- Kartu aktif berada di tengah.
+- Kartu aktif memiliki ukuran sedikit lebih besar, opacity penuh, dan shadow lebih kuat.
+- Kartu kiri dan kanan memiliki ukuran sedikit lebih kecil, opacity lebih rendah, dan shadow lebih lembut.
+- Blur kuat tidak digunakan pada kartu samping agar identitas dan informasi staf tetap terbaca.
+- Transisi antarstate harus halus dan tidak menyebabkan layout shift.
+
+Rekomendasi visual:
+- Active card scale: sekitar `1.05` sampai `1.10`.
+- Side card scale: sekitar `0.90` sampai `0.94`.
+- Active card opacity: `1`.
+- Side card opacity: sekitar `0.65` sampai `0.80`.
+- Active card dapat menggunakan `Shadow-LG`.
+- Side card menggunakan `Shadow-SM` atau `Shadow-MD`.
+
+Mobile:
+- Kartu aktif menjadi fokus utama.
+- Sebagian kartu sebelumnya atau berikutnya dapat tetap terlihat sebagai petunjuk bahwa konten dapat digeser.
+- Interaksi swipe harus tetap nyaman tanpa horizontal overflow pada halaman.
+
+Motion & Interaction:
+- Carousel dapat berjalan otomatis.
+- Autoplay berhenti sementara saat pointer berada pada area carousel.
+- Autoplay dilanjutkan ketika pointer meninggalkan area carousel.
+- Desktop mendukung drag menggunakan mouse.
+- Perangkat sentuh mendukung swipe.
+- Kontrol Previous dan Next harus dapat digunakan melalui keyboard.
+- Jika hanya tersedia satu kartu, autoplay dan interaksi perpindahan yang tidak diperlukan dinonaktifkan.
+- Implementasi harus menghormati `prefers-reduced-motion` dengan mengurangi atau menonaktifkan autoplay serta animasi non-esensial.
+
 ### 5.3 Antarmuka Chatbot & Form Input
 
  Chatbot Widget: Floating circle di kanan bawah, header bernuansa gradasi biru, gelembung chat user berlatar `Primary-700` (teks putih), gelembung bot berlatar abu-abu sangat muda (teks `Heading`).
@@ -82,8 +117,8 @@ Konsep visual menggabungkan identitas Formal institusi pendidikan dengan estetik
  Icon Library: Menggunakan Lucide Icons (Ukuran standard: 20px/24px untuk UI, 32px/48px untuk highlight ikon). Dilarang memakai Bootstrap Icons.
  Struktur Komponen (Atomic Mapping):
  Atoms: Button, Input Field, Badge Status, Heading, Lucide Icon, Text Link.
- Molecules: News Card, Achievement Card, SPMB Download Box, Search Bar, Chat Bubble.
- Organisms: Navbar (Sticky glass state), Hero Section, Footer, Contact Form Section, Chatbot Widget overlay.
+ Molecules: News Card, Achievement Card, Staff Card, SPMB Download Box, Search Bar, Chat Bubble.
+Organisms: Navbar (Sticky glass state), Hero Section, Staff Carousel, Footer, Contact Form Section, Chatbot Widget overlay.
  Templates: Public Master Layout, Detail Grid Layout, Filament Dashboard View.
  Pages: Home, Profile (Tab-based), SMPB Info, News Index & Detail, Achievement, Extracurricular, Facility, Contact.
 

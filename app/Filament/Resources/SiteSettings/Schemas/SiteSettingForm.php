@@ -38,7 +38,9 @@ class SiteSettingForm
 
                                 Toggle::make('is_maintenance')
                                     ->label('Mode Maintenance')
-                                    ->helperText('Aktifkan hanya jika website publik perlu ditutup sementara.'),
+                                    ->helperText(
+                                        'Aktifkan hanya jika website publik perlu ditutup sementara.'
+                                    ),
                             ])
                             ->columns(2),
 
@@ -48,12 +50,35 @@ class SiteSettingForm
                                     ->label('Default Meta Keywords')
                                     ->required()
                                     ->maxLength(255)
-                                    ->helperText('Pisahkan keyword dengan koma.'),
+                                    ->helperText(
+                                        'Pisahkan keyword dengan koma.'
+                                    ),
 
                                 WebpImageUpload::make(
                                     'default_og_image',
                                     'Default Open Graph Image',
                                 ),
+                            ]),
+
+                        Tab::make('Integrasi')
+                            ->schema([
+                                TextInput::make('alumni_form_url')
+                                    ->label(
+                                        'URL Google Forms Pendataan Alumni'
+                                    )
+                                    ->url()
+                                    ->maxLength(2048)
+                                    ->placeholder(
+                                        'https://forms.gle/contoh'
+                                    )
+                                    ->helperText(
+                                        'Opsional. Tombol pendataan alumni hanya ditampilkan jika URL ini tersedia.'
+                                    )
+                                    ->validationMessages([
+                                        'url' => 'URL Google Forms harus berupa tautan yang valid.',
+                                        'max' => 'URL Google Forms maksimal 2.048 karakter.',
+                                    ])
+                                    ->columnSpanFull(),
                             ]),
                     ])
                     ->columnSpanFull(),

@@ -10,6 +10,7 @@
 * Dashboard admin dengan statistik berita aktif, prestasi, ekstrakurikuler, fasilitas, dan pesan kontak belum dibaca.
 * Pengujian integrasi untuk modul Kurikulum, Guru dan Karyawan, SPMB, Alumni Pilihan, Pengetahuan Chatbot, Pesan Kontak, Kategori Berita, Manajemen Admin, dan Dashboard.
 * Pengujian pembersihan media untuk Hero Banner, Galeri, Berita, Prestasi, Ekstrakurikuler, dan Fasilitas.
+* Modul Program Unggulan dengan pengaturan pengantar halaman dan informasi umum kolaborasi LPK/BLK, pengelolaan bidang keterampilan berdasarkan status aktif dan urutan tampil, foto utama WebP, serta maksimal 2 foto dokumentasi tambahan per program.
 
 ### Changed
 
@@ -22,6 +23,7 @@
 * Seeder default tidak lagi membuat akun pengujian otomatis.
 * Dokumentasi proyek diperbarui menyesuaikan kebutuhan fitur dan implementasi backend terbaru.
 * Rancangan footer publik diperbarui dengan identitas sekolah, informasi kontak menggunakan Lucide Icons, tautan publik tanpa Login Admin, tombol media sosial, dan mini Google Maps opsional.
+* Navigasi Akademik diperluas dengan menu Program Unggulan di antara Kurikulum dan Fasilitas.
 
 
 ### Fixed

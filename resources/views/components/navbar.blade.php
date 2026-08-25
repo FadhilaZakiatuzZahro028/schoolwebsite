@@ -122,6 +122,16 @@
                                 Kurikulum
                             </a>
                         </li>
+
+                        <li>
+                            <a
+                                class="dropdown-item"
+                                href="{{ route('featured-programs.index') }}"
+                            >
+                                Program Unggulan
+                            </a>
+                        </li>
+
                         <li>
                             <a class="dropdown-item" href="{{ url('/fasilitas') }}">
                                 Fasilitas
@@ -183,6 +193,14 @@
                                 Alumni
                             </a>
                         </li>
+                        <li>
+    <a
+        class="dropdown-item"
+        href="{{ route('gallery.index') }}"
+    >
+        Galeri
+    </a>
+</li>
                     </ul>
                 </li>
 

@@ -2,6 +2,12 @@
 
 namespace Tests\Feature\Public;
 
+use App\Models\Gallery;
+use App\Models\Facility;
+use App\Models\Extracurricular;
+use App\Models\Achievement;
+use App\Models\News;
+use App\Models\NewsCategory;
 use App\Models\HeroBanner;
 use App\Models\SchoolProfile;
 use App\Models\SiteSetting;
@@ -88,4 +94,195 @@ class HomePageTest extends TestCase
             ->assertDontSee('Banner Tidak Aktif')
             ->assertDontSee('Jangan Tampilkan');
     }
+
+    public function test_home_page_displays_three_latest_published_news(): void
+{
+    $category = new NewsCategory();
+
+    $category->forceFill([
+        'name' => 'Kegiatan Sekolah',
+        'slug' => 'kegiatan-sekolah',
+    ])->save();
+
+    foreach ([
+        ['Berita Pertama', 'berita-pertama', now()->subDays(4)],
+        ['Berita Kedua', 'berita-kedua', now()->subDays(3)],
+        ['Berita Ketiga', 'berita-ketiga', now()->subDays(2)],
+        ['Berita Keempat', 'berita-keempat', now()->subDay()],
+    ] as [$title, $slug, $publishedAt]) {
+        News::query()->create([
+            'category_id' => $category->id,
+            'author_id' => null,
+            'title' => $title,
+            'slug' => $slug,
+            'excerpt' => "Ringkasan {$title}.",
+            'content' => "<p>Isi {$title}.</p>",
+            'thumbnail' => "news/{$slug}.webp",
+            'status' => 'published',
+            'view_count' => 0,
+            'published_at' => $publishedAt,
+        ]);
+    }
+
+    News::query()->create([
+        'category_id' => $category->id,
+        'author_id' => null,
+        'title' => 'Berita Draft',
+        'slug' => 'berita-draft',
+        'excerpt' => 'Berita ini belum diterbitkan.',
+        'content' => '<p>Isi berita draft.</p>',
+        'thumbnail' => 'news/berita-draft.webp',
+        'status' => 'draft',
+        'view_count' => 0,
+        'published_at' => now()->subDay(),
+    ]);
+
+    News::query()->create([
+        'category_id' => $category->id,
+        'author_id' => null,
+        'title' => 'Berita Masa Depan',
+        'slug' => 'berita-masa-depan',
+        'excerpt' => 'Berita ini belum waktunya tampil.',
+        'content' => '<p>Isi berita masa depan.</p>',
+        'thumbnail' => 'news/berita-masa-depan.webp',
+        'status' => 'published',
+        'view_count' => 0,
+        'published_at' => now()->addDay(),
+    ]);
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('Berita Terbaru')
+        ->assertSeeInOrder([
+            'Berita Keempat',
+            'Berita Ketiga',
+            'Berita Kedua',
+        ])
+        ->assertDontSee('Berita Pertama')
+        ->assertDontSee('Berita Draft')
+        ->assertDontSee('Berita Masa Depan');
+}
+
+public function test_home_page_displays_three_latest_achievements(): void
+{
+    foreach ([
+        ['Prestasi Lama', 'prestasi-lama', 2022],
+        ['Prestasi Kabupaten', 'prestasi-kabupaten', 2024],
+        ['Prestasi Provinsi', 'prestasi-provinsi', 2025],
+        ['Prestasi Nasional', 'prestasi-nasional', 2026],
+    ] as [$title, $slug, $year]) {
+        Achievement::query()->create([
+            'title' => $title,
+            'slug' => $slug,
+            'description' => "Deskripsi {$title}.",
+            'level' => 'Nasional',
+            'year' => $year,
+            'image' => "achievements/{$slug}.webp",
+        ]);
+    }
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('Prestasi Terkini')
+        ->assertSeeInOrder([
+            'Prestasi Nasional',
+            'Prestasi Provinsi',
+            'Prestasi Kabupaten',
+        ])
+        ->assertDontSee('Prestasi Lama');
+}
+
+public function test_home_page_displays_three_featured_extracurriculars(): void
+{
+    foreach ([
+        ['Basket', 'basket'],
+        ['Futsal', 'futsal'],
+        ['Paskibra', 'paskibra'],
+        ['Pramuka', 'pramuka'],
+    ] as [$name, $slug]) {
+        Extracurricular::query()->create([
+            'name' => $name,
+            'slug' => $slug,
+            'description' => "Deskripsi kegiatan {$name}.",
+            'coach_name' => "Pembina {$name}",
+            'schedule' => 'Jumat, 15.00 WIB',
+            'image' => "extracurriculars/{$slug}.webp",
+        ]);
+    }
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('Ekstrakurikuler Pilihan')
+        ->assertSeeInOrder([
+            'Basket',
+            'Futsal',
+            'Paskibra',
+        ])
+        ->assertDontSee('Pramuka');
+}
+
+public function test_home_page_displays_three_featured_facilities(): void
+{
+    foreach ([
+        ['Aula Sekolah', 'aula-sekolah'],
+        ['Laboratorium Komputer', 'laboratorium-komputer'],
+        ['Perpustakaan', 'perpustakaan'],
+        ['Ruang Kelas', 'ruang-kelas'],
+    ] as [$name, $slug]) {
+        Facility::query()->create([
+            'name' => $name,
+            'slug' => $slug,
+            'description' => "Deskripsi fasilitas {$name}.",
+            'image' => "facilities/{$slug}.webp",
+        ]);
+    }
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('Fasilitas Sekolah')
+        ->assertSeeInOrder([
+            'Aula Sekolah',
+            'Laboratorium Komputer',
+            'Perpustakaan',
+        ])
+        ->assertDontSee('Ruang Kelas');
+}
+
+public function test_home_page_displays_four_latest_gallery_items(): void
+{
+    $items = [
+        ['Galeri Lama', 'galeri-lama', 10],
+        ['Kegiatan Senin', 'kegiatan-senin', 4],
+        ['Kegiatan Selasa', 'kegiatan-selasa', 3],
+        ['Kegiatan Rabu', 'kegiatan-rabu', 2],
+        ['Kegiatan Kamis', 'kegiatan-kamis', 1],
+    ];
+
+    foreach ($items as [$title, $imageName, $daysAgo]) {
+        $galleryItem = Gallery::query()->create([
+            'title' => $title,
+            'description' => "Dokumentasi {$title}.",
+            'image' => "galleries/{$imageName}.webp",
+        ]);
+
+        $timestamp = now()->subDays($daysAgo);
+
+        $galleryItem->forceFill([
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ])->saveQuietly();
+    }
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('Galeri Terbaru')
+        ->assertSeeInOrder([
+            'Kegiatan Kamis',
+            'Kegiatan Rabu',
+            'Kegiatan Selasa',
+            'Kegiatan Senin',
+        ])
+        ->assertDontSee('Galeri Lama')
+        ->assertSee(route('gallery.index'), false);
+}
 }

@@ -1,5 +1,5 @@
 # System Architecture - Website Resmi SMA PGRI 1 Tulungagung
-Version: 1.3 | Status: Revised Approved Baseline (Laravel 13 + Filament)
+Version: 1.4 | Status: Revised Approved Baseline (Laravel 13 + Filament)
 
 ## 1. Arsitektur Umum & Alur Data
 Sistem dibagi menjadi dua area: Public Website (Blade + Bootstrap 5) dan Admin Panel (Filament Admin). Alur data mengikuti pola standard pencarian berlapis:
@@ -68,10 +68,12 @@ use App\Http\Controllers\Public\{
     CurriculumController,
     ExtracurricularController,
     FacilityController,
+    FeaturedProgramController,
     HomeController,
     NewsController,
     ProfileController,
     SpmbController,
+    GalleryController,
     StaffController
 };
 
@@ -84,7 +86,23 @@ Route::get('/guru', [StaffController::class, 'teachers'])->name('staff.teachers'
 Route::get('/karyawan', [StaffController::class, 'employees'])->name('staff.employees');
 
 Route::get('/kurikulum', [CurriculumController::class, 'index'])->name('curriculums.index');
-Route::get('/fasilitas', [FacilityController::class, 'index'])->name('facilities.index');
+
+Route::get('/program-unggulan', [
+    FeaturedProgramController::class,
+    'index',
+])->name('featured-programs.index');
+
+Route::prefix('fasilitas')->name('facilities.')->group(function () {
+    Route::get('/', [
+        FacilityController::class,
+        'index',
+    ])->name('index');
+
+    Route::get('/{slug}', [
+        FacilityController::class,
+        'show',
+    ])->name('show');
+});
 
 Route::prefix('berita')->name('news.')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('index');
@@ -93,10 +111,28 @@ Route::prefix('berita')->name('news.')->group(function () {
 
 Route::get('/spmb', [SpmbController::class, 'index'])->name('spmb.index');
 
-Route::get('/prestasi', [AchievementController::class, 'index'])->name('achievements.index');
+Route::prefix('prestasi')
+    ->name('achievements.')
+    ->group(function (): void {
+        Route::get('/', [
+            AchievementController::class,
+            'index',
+        ])->name('index');
+
+        Route::get('/{slug}', [
+            AchievementController::class,
+            'show',
+        ])->name('show');
+    });
+
 Route::get('/ekstrakurikuler', [ExtracurricularController::class, 'index'])->name('extracurriculars.index');
 
 Route::get('/alumni', [AlumniController::class, 'index'])->name('alumni.index');
+
+Route::get('/galeri', [
+    GalleryController::class,
+    'index',
+])->name('gallery.index');
 
 Route::prefix('kontak')->name('contact.')->group(function () {
     Route::get('/', [ContactController::class, 'index'])->name('index');
@@ -118,15 +154,27 @@ Halaman Alumni hanya memiliki route `GET` karena pendataan alumni dilakukan mela
 
  Konvensi Tabel: Menggunakan format plural snake_case dengan primary key `id` auto-increment, `created_at`, dan `updated_at`.
 
- Model Entitas Utama: `User`, `SchoolProfile`, `SiteSetting`, `News`, `NewsCategory`, `Achievement`, `Extracurricular`, `Facility`, `Gallery`, `HeroBanner`, `Curriculum`, `StaffMember`, `AlumniHighlight`, `ContactMessage`, dan `ChatbotKnowledge`.
+ Model Entitas Utama: `User`, `SchoolProfile`, `SiteSetting`, `News`, `NewsCategory`, `Achievement`, `Extracurricular`, `Facility`, `FeaturedProgramSetting`, `FeaturedProgram`, `FeaturedProgramImage`, `Gallery`, `HeroBanner`, `Curriculum`, `StaffMember`, `StaffEducation`, `AlumniHighlight`, `ContactMessage`, dan `ChatbotKnowledge`.
 
- Staff Member: Data Guru dan Karyawan menggunakan satu model `StaffMember`. Perbedaan jenis data ditentukan melalui field kategori staf seperti `teacher` dan `employee`. Halaman publik tetap dipisahkan menjadi Data Guru dan Data Karyawan.
+Staff Member: Data Guru dan Karyawan menggunakan satu model `StaffMember`. Perbedaan jenis data ditentukan melalui field kategori staf seperti `teacher` dan `employee`. Halaman publik tetap dipisahkan menjadi Data Guru dan Data Karyawan.
+
+Staff Education: Riwayat pendidikan staf disimpan melalui model `StaffEducation` yang berelasi one-to-many dengan `StaffMember`. Satu staf dapat memiliki lebih dari satu riwayat pendidikan. Setiap riwayat dapat menyimpan jenjang pendidikan, program studi, nama institusi, dan urutan tampil.
+
+Tampilan Publik Staf: Data Guru dan Karyawan disajikan menggunakan centered horizontal carousel. Halaman Guru menggunakan data Guru aktif berdasarkan `sort_order`, dengan Kepala Sekolah ditempatkan pada urutan paling awal sehingga menjadi slide pertama. Halaman Karyawan menggunakan urutan `sort_order` Karyawan aktif.
+
+Featured Program Setting: Informasi tingkat halaman seperti pengantar Program Unggulan dan keterangan umum kolaborasi LPK/BLK disimpan melalui singleton `FeaturedProgramSetting`. Data ini bersifat dinamis agar informasi sekolah tidak ditulis secara hardcode pada Blade.
+
+Featured Program: Data Program Unggulan menggunakan model `FeaturedProgram`. Setiap program menyimpan nama, ringkasan, deskripsi/manfaat, foto utama, status aktif, dan urutan tampil. Hanya program aktif yang digunakan pada halaman publik dan data ditampilkan berdasarkan `sort_order`.
+
+Featured Program Image: Dokumentasi tambahan Program Unggulan disimpan melalui model `FeaturedProgramImage` yang memiliki relasi one-to-many dengan `FeaturedProgram`. Setiap program dapat memiliki maksimal 2 foto dokumentasi tambahan yang memiliki teks alternatif dan urutan tampil.
+
+Tampilan Publik Program Unggulan: Seluruh Program Unggulan disajikan melalui satu landing page `/program-unggulan`. Versi saat ini tidak menyediakan halaman detail per program sehingga entitas `FeaturedProgram` tidak membutuhkan slug untuk routing publik.
 
  Alumni: Website hanya menyimpan data `AlumniHighlight` untuk maksimal 4 Alumni Pilihan yang ditampilkan kepada publik. Data hasil pendataan alumni tidak disimpan di database Laravel.
 
  Soft Deletes: Digunakan pada data yang memang membutuhkan perlindungan dari penghapusan tidak disengaja sesuai desain database masing-masing modul.
 
- Sistem Slug: Field `slug` wajib unik dan digunakan pada entitas `News`, `Achievement`, `Extracurricular`, dan `Facility` untuk keperluan SEO URL.
+  Sistem Slug: Field `slug` wajib unik dan digunakan pada entitas `News`, `Achievement`, `Extracurricular`, dan `Facility` yang memiliki URL detail SEO-friendly. `FeaturedProgram` tidak menggunakan slug pada versi saat ini karena seluruh program ditampilkan melalui satu landing page tanpa route detail per program.
 
  Penyimpanan Media: File dilarang disimpan langsung di direktori `public/`. Seluruh media yang dikelola website wajib menggunakan Laravel Storage pada sub-folder sesuai modul.
 

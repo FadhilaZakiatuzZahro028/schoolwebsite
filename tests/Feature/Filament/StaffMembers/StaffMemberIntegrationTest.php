@@ -112,6 +112,140 @@ class StaffMemberIntegrationTest extends TestCase
         $this->assertNull($staffMember->photo);
     }
 
+    public function test_it_creates_teacher_with_multiple_educations(): void
+{
+    Livewire::test(CreateStaffMember::class)
+        ->fillForm([
+            'name' => 'Dewi Lestari, S.Pd., M.Pd.',
+            'staff_type' => StaffMember::TYPE_TEACHER,
+            'position' => 'Guru Matematika',
+            'subject' => 'Matematika',
+            'is_active' => true,
+            'sort_order' => 1,
+            'educations' => [
+                [
+                    'education_level' => 'S2',
+                    'study_program' => 'Pendidikan Matematika',
+                    'institution' => 'Universitas Negeri Surabaya',
+                    'sort_order' => 2,
+                ],
+                [
+                    'education_level' => 'S1',
+                    'study_program' => 'Pendidikan Matematika',
+                    'institution' => 'Universitas Negeri Malang',
+                    'sort_order' => 1,
+                ],
+            ],
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $staffMember = StaffMember::query()->firstOrFail();
+
+    $this->assertDatabaseCount('staff_educations', 2);
+
+    $this->assertDatabaseHas('staff_educations', [
+        'staff_member_id' => $staffMember->id,
+        'education_level' => 'S1',
+        'study_program' => 'Pendidikan Matematika',
+        'institution' => 'Universitas Negeri Malang',
+        'sort_order' => 1,
+    ]);
+
+    $this->assertDatabaseHas('staff_educations', [
+        'staff_member_id' => $staffMember->id,
+        'education_level' => 'S2',
+        'study_program' => 'Pendidikan Matematika',
+        'institution' => 'Universitas Negeri Surabaya',
+        'sort_order' => 2,
+    ]);
+
+    $this->assertSame(
+        ['S1', 'S2'],
+        $staffMember->educations()
+            ->pluck('education_level')
+            ->all(),
+    );
+}
+
+    public function test_it_updates_staff_educations(): void
+{
+    $staffMember = StaffMember::query()->create([
+        'name' => 'Dewi Lestari, S.Pd.',
+        'staff_type' => StaffMember::TYPE_TEACHER,
+        'photo' => null,
+        'position' => 'Guru Matematika',
+        'subject' => 'Matematika',
+        'department' => null,
+        'is_active' => true,
+        'sort_order' => 1,
+    ]);
+
+    $staffMember->educations()->create([
+        'education_level' => 'S1',
+        'study_program' => 'Pendidikan Matematika',
+        'institution' => 'Universitas Lama',
+        'sort_order' => 1,
+    ]);
+
+    Livewire::test(EditStaffMember::class, [
+        'record' => $staffMember->getRouteKey(),
+    ])
+        ->fillForm([
+            'name' => 'Dewi Lestari, S.Pd., M.Pd.',
+            'staff_type' => StaffMember::TYPE_TEACHER,
+            'position' => 'Guru Matematika',
+            'subject' => 'Matematika',
+            'is_active' => true,
+            'sort_order' => 1,
+            'educations' => [
+                [
+                    'education_level' => 'S1',
+                    'study_program' => 'Pendidikan Matematika',
+                    'institution' => 'Universitas Negeri Malang',
+                    'sort_order' => 1,
+                ],
+                [
+                    'education_level' => 'S2',
+                    'study_program' => 'Pendidikan Matematika',
+                    'institution' => 'Universitas Negeri Surabaya',
+                    'sort_order' => 2,
+                ],
+            ],
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $this->assertDatabaseCount('staff_educations', 2);
+
+    $this->assertDatabaseMissing('staff_educations', [
+        'staff_member_id' => $staffMember->id,
+        'institution' => 'Universitas Lama',
+    ]);
+
+    $this->assertDatabaseHas('staff_educations', [
+        'staff_member_id' => $staffMember->id,
+        'education_level' => 'S1',
+        'institution' => 'Universitas Negeri Malang',
+        'sort_order' => 1,
+    ]);
+
+    $this->assertDatabaseHas('staff_educations', [
+        'staff_member_id' => $staffMember->id,
+        'education_level' => 'S2',
+        'institution' => 'Universitas Negeri Surabaya',
+        'sort_order' => 2,
+    ]);
+
+    $this->assertSame(
+        ['S1', 'S2'],
+        $staffMember->fresh()
+            ->educations
+            ->pluck('education_level')
+            ->all(),
+    );
+}
+
     public function test_it_replaces_photo_and_normalizes_type_specific_fields(): void
     {
         $oldPhoto = app(ImageUploadService::class)->storeAsWebp(

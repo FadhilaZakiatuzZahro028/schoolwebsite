@@ -16,20 +16,37 @@ class ImageUploadService
     ) {}
 
     public function storeAsWebp(
-        UploadedFile|TemporaryUploadedFile|string|null $file,
-        string $directory,
-        int $maxWidth = 1600,
-        int $quality = 80,
-    ): ?string {
-        if (is_string($file)) {
-            return $file;
+    UploadedFile|TemporaryUploadedFile|string|null $file,
+    string $directory,
+    int $maxWidth = 1600,
+    int $quality = 80,
+): ?string {
+    $directory = trim($directory, '/');
+
+    if (is_string($file)) {
+        $normalizedPath = ltrim(
+            str_replace('\\', '/', $file),
+            '/',
+        );
+
+        if (
+            str_contains($normalizedPath, '../')
+            || ! str_starts_with(
+                $normalizedPath,
+                "{$directory}/",
+            )
+        ) {
+            throw new RuntimeException(
+                "Path gambar tidak valid untuk direktori {$directory}.",
+            );
         }
 
-        if ($file === null) {
-            return null;
-        }
+        return $normalizedPath;
+    }
 
-        $directory = trim($directory, '/');
+    if ($file === null) {
+        return null;
+    }
         $filename = now()->format('YmdHis').'-'.Str::uuid().'.webp';
         $path = "{$directory}/{$filename}";
 

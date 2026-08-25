@@ -12,6 +12,7 @@ class SiteSetting extends Model
         'default_meta_keywords',
         'default_og_image',
         'copyright_text',
+        'alumni_form_url',
         'is_maintenance',
     ];
 

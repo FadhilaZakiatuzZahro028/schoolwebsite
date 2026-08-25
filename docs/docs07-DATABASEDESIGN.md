@@ -37,14 +37,102 @@ Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
  `extracurriculars` (Data Organisasi Kesiswaan)
    `id` (unsignedBigInteger, PK) | `name` (string) | `slug` (string, Unique) | `description` (text) | `coach_name` (string) | `schedule` (string) | `image` (string) | `timestamps` | `softDeletes`
 
+   `extracurricular_images` (Foto Dokumentasi Tambahan Ekstrakurikuler)
+  `id` (unsignedBigInteger, PK) |
+  `extracurricular_id` (FK -> `extracurriculars.id`, Cascade) |
+  `image` (string) |
+  `alt_text` (string/nullable) |
+  `sort_order` (unsignedInteger, default: 0) |
+  `timestamps`
+
+Relasi:
+- Satu `extracurricular` dapat memiliki 0 sampai maksimal 2 `extracurricular_images`.
+- `extracurricular_images.extracurricular_id` menggunakan cascade delete.
+- Pengurutan dokumentasi menggunakan `sort_order`.
+- Batas maksimal 2 gambar ditegakkan pada layer aplikasi/admin.
+
  `facilities` (Sarana Prasarana)
    `id` (unsignedBigInteger, PK) | `name` (string) | `slug` (string, Unique) | `description` (text) | `image` (string) | `timestamps` | `softDeletes`
+
+   `facility_images` (Foto Dokumentasi Tambahan Fasilitas)
+  `id` (unsignedBigInteger, PK) |
+  `facility_id` (FK -> `facilities.id`, Cascade) |
+  `image` (string) |
+  `alt_text` (string/nullable) |
+  `sort_order` (integer, default: 0) |
+  `timestamps`
+
+Aturan `facility_images`:
+- `facilities.image` tetap digunakan sebagai foto utama atau cover fasilitas.
+- `facility_images` hanya menyimpan dokumentasi tambahan.
+- Maksimal 2 foto dokumentasi tambahan dapat dikelola untuk setiap fasilitas pada versi saat ini.
+- Foto tambahan bersifat opsional.
+- Foto ditampilkan berdasarkan `sort_order`.
+- `alt_text` digunakan apabila tersedia.
+- Jika `alt_text` kosong, frontend wajib menggunakan fallback teks alternatif yang berasal dari nama fasilitas.
+- Soft delete pada `facilities` tidak langsung menghapus foto dokumentasi tambahan agar data tetap dapat dipulihkan.
+- Ketika fasilitas dihapus secara permanen, file foto utama dan seluruh file dokumentasi tambahannya wajib ikut dibersihkan dari Laravel Storage sebelum atau saat record terkait dihapus permanen.
 
  `galleries` (Album Foto Kegiatan)
    `id` (unsignedBigInteger, PK) | `title` (string) | `description` (string/nullable) | `image` (string) | `timestamps`
 
  `curriculums` (Informasi Kurikulum Berdasarkan Tahun Ajaran)
    `id` (unsignedBigInteger, PK) | `title` (string) | `academic_year` (string) | `description` (text/nullable) | `pdf_file` (string/nullable) | `image_file` (string/nullable) | `preview_image` (string/nullable) | `is_published` (boolean, default: true) | `sort_order` (integer, default: 0) | `timestamps`
+
+   `featured_program_settings` (Pengaturan Halaman Program Unggulan - Maksimal 1 Row)
+   `id` (unsignedBigInteger, PK) |
+   `introduction` (longText/nullable) |
+   `collaboration_text` (longText/nullable) |
+   `timestamps`
+
+Aturan `featured_program_settings`:
+- Tabel memiliki maksimal 1 record aktif sebagai pengaturan tingkat halaman.
+- `introduction` menyimpan narasi pengantar Program Unggulan.
+- `collaboration_text` menyimpan keterangan umum mengenai kolaborasi pengembangan keterampilan dengan LPK/BLK.
+- Field tidak boleh digunakan untuk menampilkan nama mitra, sertifikasi, penyaluran kerja, jaminan pekerjaan, atau klaim lain yang belum dikonfirmasi sekolah.
+- Halaman tetap dapat digunakan apabila salah satu teks belum tersedia.
+- Informasi ini tidak ditulis secara hardcode pada Blade.
+
+ `featured_programs` (Bidang Program Unggulan)
+   `id` (unsignedBigInteger, PK) |
+   `name` (string) |
+   `summary` (string) |
+   `description` (text) |
+   `image` (string) |
+   `is_active` (boolean, default: true) |
+   `sort_order` (unsignedInteger, default: 0) |
+   `timestamps` |
+   `softDeletes`
+
+Aturan `featured_programs`:
+- `name` menyimpan nama bidang keterampilan seperti Bahasa Korea, Desain Grafis, Tata Boga, Tata Kecantikan, atau Otomotif.
+- `summary` menyimpan ringkasan pendek untuk kebutuhan showcase.
+- `description` menyimpan penjelasan manfaat atau pengalaman keterampilan yang diberikan.
+- `image` merupakan foto utama program.
+- Hanya data `is_active = true` yang ditampilkan pada halaman publik.
+- Program publik diurutkan berdasarkan `sort_order`, kemudian nama apabila diperlukan sebagai tie-breaker.
+- Tidak terdapat field `slug` pada versi saat ini karena tidak tersedia route detail per program.
+- Soft delete tidak langsung menghapus media agar data dapat dipulihkan.
+
+ `featured_program_images` (Foto Dokumentasi Tambahan Program Unggulan)
+   `id` (unsignedBigInteger, PK) |
+   `featured_program_id` (FK -> `featured_programs.id`, Cascade) |
+   `image` (string) |
+   `alt_text` (string/nullable) |
+   `sort_order` (unsignedInteger, default: 0) |
+   `timestamps`
+
+Aturan `featured_program_images`:
+- Satu `featured_program` dapat memiliki 0 sampai maksimal 2 `featured_program_images`.
+- Batas maksimal 2 gambar ditegakkan pada layer aplikasi/admin.
+- Foto tambahan bersifat opsional.
+- Pengurutan dokumentasi menggunakan `sort_order`.
+- `alt_text` digunakan apabila tersedia.
+- Jika `alt_text` kosong, frontend menggunakan fallback yang berasal dari nama program.
+- Foreign key menggunakan cascade delete.
+- Soft delete parent tidak langsung menghapus file media.
+- Force delete parent wajib membersihkan foto utama dan seluruh dokumentasi tambahannya dari Laravel Storage.
+- Penggantian atau penghapusan foto dokumentasi wajib membersihkan file lama yang tidak lagi digunakan.
 
  `staff_members` (Data Guru dan Karyawan)
    `id` (unsignedBigInteger, PK) | `name` (string) | `staff_type` (enum: 'teacher', 'employee') | `photo` (string/nullable) | `position` (string) | `subject` (string/nullable) | `department` (string/nullable) | `is_active` (boolean, default: true) | `sort_order` (integer, default: 0) | `timestamps`
@@ -55,6 +143,23 @@ Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
  - `subject` digunakan jika data merupakan Guru dan dapat dikosongkan jika tidak diperlukan.
  - `department` digunakan jika data merupakan Karyawan dan dapat dikosongkan jika tidak diperlukan.
  - `photo` bersifat opsional. Frontend menggunakan placeholder apabila foto tidak tersedia.
+
+ `staff_educations` (Riwayat Pendidikan Guru dan Karyawan)
+  `id` (unsignedBigInteger, PK) |
+  `staff_member_id` (FK -> `staff_members.id`, Cascade) |
+  `education_level` (string) |
+  `study_program` (string/nullable) |
+  `institution` (string) |
+  `sort_order` (integer, default: 0) |
+  `timestamps`
+
+Aturan `staff_educations`:
+- Satu `staff_member` dapat memiliki lebih dari satu riwayat pendidikan.
+- `education_level` menyimpan jenjang pendidikan seperti `D3`, `S1`, `S2`, atau `S3`.
+- `study_program` menyimpan program studi dan dapat dikosongkan jika informasi tidak tersedia.
+- `institution` menyimpan nama perguruan tinggi atau institusi pendidikan.
+- Riwayat pendidikan ditampilkan berdasarkan `sort_order`.
+- Jika data staf dihapus, riwayat pendidikan terkait ikut dihapus melalui relasi cascade.
 
  `spmb_settings` (Informasi SPMB - Maksimal 1 Row)
    `id` (unsignedBigInteger, PK) | `description` (longText/nullable) | `information_file` (string/nullable) | `information_preview` (string/nullable) | `brochure_file` (string/nullable) | `brochure_preview` (string/nullable) | `timestamps`
@@ -105,17 +210,22 @@ Version: 1.3 | Status: Revised Approved Baseline (Production-Ready)
    `news.slug` (Unique), `news.status`, `news.published_at`
    `achievements.slug` (Unique), `achievements.year`
    `extracurriculars.slug` (Unique)
-   `facilities.slug` (Unique)
+   `extracurricular_images.extracurricular_id`, `extracurricular_images.sort_order`
+   `facilities.slug` (Unique) 
+   `facility_images.facility_id`, `facility_images.sort_order`
    `news.category_id` (Foreign Key Index)
    `curriculums.academic_year`, `curriculums.is_published`
    `staff_members.staff_type`, `staff_members.is_active`, `staff_members.sort_order`
    `alumni_highlights.is_active`, `alumni_highlights.sort_order`
+   `staff_educations.staff_member_id`, `staff_educations.sort_order`
+   `featured_programs.is_active`, `featured_programs.sort_order`
+   `featured_program_images.featured_program_id`, `featured_program_images.sort_order`
 
  Soft Deletes Feature:
  Diaktifkan pada tabel yang membutuhkan perlindungan dari penghapusan tidak disengaja:
- `news`, `achievements`, `extracurriculars`, `facilities`, dan `contact_messages`.
+`news`, `achievements`, `extracurriculars`, `facilities`, `featured_programs`, dan `contact_messages`.
 
- Modul `staff_members`, `curriculums`, `spmb_settings`, dan `alumni_highlights` tidak diwajibkan menggunakan Soft Deletes pada versi awal kecuali kebutuhan implementasi kemudian mengharuskannya.
+ Modul `staff_members`, `curriculums`, `spmb_settings`, `featured_program_settings`, dan `alumni_highlights` tidak diwajibkan menggunakan Soft Deletes 
 
 ---
 
@@ -138,10 +248,13 @@ Struktur folder:
  Menampung gambar dokumentasi Prestasi.
 
  `extracurriculars/`
- Menampung gambar kegiatan Ekstrakurikuler.
+Menampung foto utama dan maksimal 2 foto dokumentasi tambahan Ekstrakurikuler dalam format WebP teroptimasi.
 
  `facilities/`
- Menampung gambar Fasilitas.
+Menampung foto utama dan foto dokumentasi tambahan Fasilitas dalam format WebP teroptimasi.
+
+ `featured-programs/`
+ Menampung foto utama dan maksimal 2 foto dokumentasi tambahan setiap Program Unggulan dalam format WebP teroptimasi.
 
  `gallery/`
  Menampung gambar Galeri.
@@ -166,6 +279,7 @@ Aturan ini berlaku untuk:
 - Prestasi
 - Ekstrakurikuler
 - Fasilitas
+- Program Unggulan
 - Galeri
 - Hero Banner
 - Guru & Karyawan
@@ -210,7 +324,7 @@ Tidak terdapat penyimpanan:
 
 | Nama Tabel | Estimasi Jumlah Data Aktual | Sifat Pertumbuhan Data |
 | :--- | :--- | :--- |
-| `school_profiles` / `site_settings` / `spmb_settings` | 1 Record per Tabel | Statis permanen / diperbarui |
+| `school_profiles` / `site_settings` / `spmb_settings` / `featured_program_settings` | 1 Record per Tabel | Statis permanen / diperbarui |
 | `users` | 2 - 5 Record | Sangat statis |
 | `news` | 50 - 200 Record | Tumbuh berkala |
 | `achievements` | 30 - 100 Record | Tumbuh lambat |
@@ -221,5 +335,8 @@ Tidak terdapat penyimpanan:
 | `alumni_highlights` | Maksimal 4 Aktif | Dipilih dan diperbarui oleh sekolah |
 | `contact_messages` | 100 - 500 Record | Bertambah berkala |
 | `chatbot_knowledges` | 30 - 100 Record | Diperbarui sesuai kebutuhan informasi sekolah |
+| `staff_educations` | 20 - 200 Record | Mengikuti jumlah staf dan riwayat pendidikan |
+| `featured_programs` | 5 - 20 Record | Relatif statis / dapat bertambah sesuai program sekolah |
+| `featured_program_images` | 0 - 40 Record | Mengikuti jumlah Program Unggulan dan dokumentasinya |
 
 Data hasil pendataan alumni tidak termasuk dalam estimasi database website karena dikelola melalui Google Forms dan Google Sheets.

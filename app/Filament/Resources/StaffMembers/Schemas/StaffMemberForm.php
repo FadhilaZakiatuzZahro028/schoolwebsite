@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\StaffMembers\Schemas;
 
+use Filament\Forms\Components\Repeater;
 use App\Filament\Forms\Components\WebpImageUpload;
 use App\Models\StaffMember;
 use Filament\Forms\Components\Select;
@@ -77,6 +78,55 @@ class StaffMemberForm
                     ])
                     ->columns(2)
                     ->columnSpanFull(),
+
+                    Section::make('Riwayat Pendidikan')
+    ->description(
+        'Tambahkan satu atau lebih riwayat pendidikan Guru atau Karyawan.'
+    )
+    ->schema([
+        Repeater::make('educations')
+            ->label('Pendidikan')
+            ->relationship()
+            ->schema([
+                Select::make('education_level')
+                    ->label('Jenjang Pendidikan')
+                    ->options([
+                        'D3' => 'D3',
+                        'D4' => 'D4',
+                        'S1' => 'S1',
+                        'S2' => 'S2',
+                        'S3' => 'S3',
+                    ])
+                    ->required()
+                    ->native(false),
+
+                TextInput::make('study_program')
+                    ->label('Program Studi')
+                    ->placeholder('Contoh: Pendidikan Matematika')
+                    ->maxLength(255),
+
+                TextInput::make('institution')
+                    ->label('Perguruan Tinggi / Institusi')
+                    ->placeholder('Contoh: Universitas Negeri Malang')
+                    ->required()
+                    ->maxLength(255),
+
+                TextInput::make('sort_order')
+                    ->label('Urutan Pendidikan')
+                    ->numeric()
+                    ->minValue(0)
+                    ->default(0)
+                    ->required()
+                    ->helperText(
+                        'Angka lebih kecil ditampilkan lebih dahulu.'
+                    ),
+            ])
+            ->columns(2)
+            ->defaultItems(0)
+            ->addActionLabel('Tambah Riwayat Pendidikan')
+            ->columnSpanFull(),
+    ])
+    ->columnSpanFull(),
             ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Services\ImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -43,6 +44,13 @@ class StaffMember extends Model
             'sort_order' => 'integer',
         ];
     }
+
+    public function educations(): HasMany
+{
+    return $this->hasMany(StaffEducation::class)
+        ->orderBy('sort_order')
+        ->orderBy('id');
+}
 
     public function scopeActive(Builder $query): Builder
     {
